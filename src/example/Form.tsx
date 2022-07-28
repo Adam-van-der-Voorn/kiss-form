@@ -1,10 +1,15 @@
 import React, { useState } from "react";
 import trimObject from "../lib/trimObject";
 import useForm from "../lib/useForm";
+import Emails from "./Emails";
 
 const initialData = {
     name: "",
-    age: ""
+    age: "",
+    email: {
+        personal: "",
+        work: ""
+    }
 };
 
 type FormInput = typeof initialData;
@@ -23,10 +28,13 @@ function Form() {
 
     return (
         <form onSubmit={handleSubmit}>
-            <input type="text" {...register("name")} autoComplete="off" />
-            <input type="number" {...register("age")} />
+            <div>
+                <input type="text" {...register("name")} autoComplete="off" />
+                <input type="number" {...register("age")} />
+            </div>
+            <Emails register={register} />
             <pre id="form-state">
-                {JSON.stringify(formState)}
+                {JSON.stringify(trimObject(formState))}
             </pre>
             <input type="submit" />
             <pre id="submitted-data">

@@ -35,3 +35,11 @@
 //     }
 //   }
 // }
+
+Cypress.Commands.add('innerHTMLEqualsObj' as any, { prevSubject: true }, (subject, obj) => {
+  console.log("innerHTMLEqualsObj:");
+  const innerObj = JSON.parse(subject.text());
+  console.log({ innerHTML: subject.text(), innerObj, inputObj: obj });
+  expect(innerObj).to.deep.equal(obj);
+  return subject;
+});
