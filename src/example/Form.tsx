@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import trimObject from "../lib/trimObject";
 import useForm from "../lib/useForm";
 
 const initialData = {
@@ -15,7 +16,7 @@ function Form() {
 
     const onSubmit = (data: FormInput) => {
         console.log("submit!", data);
-        setSubmittedData(data)
+        setSubmittedData(trimObject(data));
     };
 
     const { formState, register, handleSubmit } = useForm(initialData, onSubmit);
