@@ -1,12 +1,16 @@
-import React from "react";
+import React, { memo } from "react";
 
-function Emails({ register }: { register: any; }) {
+type Props = {
+    register: any;
+};
+
+function Emails({ register }: Props) {
     return (
-        <div>
+        <div className="nested">
             <input type="text" {...register("email.work")} autoComplete="off" />
             <input type="text" {...register("email.personal")} autoComplete="off" />
         </div>
     );
 }
 
-export default Emails;
+export default memo(Emails);

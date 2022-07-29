@@ -1,26 +1,28 @@
+/// <reference types="Cypress" />
+
 describe('basic', () => {
   it('types and submits', () => {
     const expected = {
       name: "john doe",
       age: "32"
-    }
+    };
     cy.visit('/');
     cy.get('input[name=name]')
-      .type(expected.name)
+      .type(expected.name);
     cy.get('input[name=age]')
-      .type(expected.age)
+      .type(expected.age);
     cy.get('input[type=submit]')
-      .click()
+      .click();
     cy.get('#submitted-data')
-      .contains(JSON.stringify(expected))
+      .innerHTMLEqualsObj(expected);
   });
   it('updates state as it types', () => {
     const expected = {
       name: "john doe",
-    }
+    };
     cy.visit('/');
     cy.get('input[name=name]')
-      .type(expected.name)
+      .type(expected.name);
     cy.get('#form-state')
       .innerHTMLEqualsObj(expected);
   });
@@ -30,15 +32,15 @@ describe('basic', () => {
         work: "123",
         personal: "456",
       }
-    }
+    };
     cy.visit('/');
     cy.get('input[name="email.work"]')
-      .type(expected.email.work)
+      .type(expected.email.work);
     cy.get('input[name="email.personal"]')
-      .type(expected.email.personal)
+      .type(expected.email.personal);
     cy.get('input[type=submit]')
-      .click()
+      .click();
     cy.get('#submitted-data')
-      .innerHTMLEqualsObj(expected)
+      .innerHTMLEqualsObj(expected);
   });
 });

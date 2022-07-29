@@ -1,3 +1,6 @@
+import isObj from "./util/isObj";
+import objIsEmpty from "./util/objIsEmpty";
+
 export default function trimObject(obj: any): any {
     let newObj: any = {};
     for (const [key, value] of Object.entries(obj)) {
@@ -13,16 +16,3 @@ export default function trimObject(obj: any): any {
     }
     return newObj;
 }
-
-function isObj(x: any): boolean {
-    return (
-        typeof x === 'object' &&
-        !Array.isArray(x) &&
-        x !== null
-    );
-}
-
-function objIsEmpty(obj: any) {
-    return Object.keys(obj).length === 0;
-}
-
