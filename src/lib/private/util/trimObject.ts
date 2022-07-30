@@ -1,5 +1,5 @@
-import isObj from "./util/isObj";
-import objIsEmpty from "./util/objIsEmpty";
+import isObj from "./isObj";
+import objIsEmpty from "./objIsEmpty";
 
 export default function trimObject(obj: Record<string, any>): Record<string, any> {
     let newObj: Record<string, any> = {};

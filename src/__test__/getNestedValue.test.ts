@@ -1,4 +1,4 @@
-import getNestedValue from "../lib/getNestedValue";
+import getNestedValue from "../lib/private/util/getNestedValue";
 
 const target = "target!";
 

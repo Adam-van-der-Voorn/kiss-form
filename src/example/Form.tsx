@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import trimObject from "../lib/trimObject";
+import trimObject from "../lib/private/util/trimObject";
 import useForm from "../lib/useForm";
 import Emails from "./Emails";
 import Favourites from "./Favourites";

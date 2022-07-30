@@ -1,4 +1,4 @@
-import getKeysFromObject from "../lib/getKeysFromObject";
+import getKeysFromObject from "../lib/private/util/getKeysFromObject";
 
 const val = ":)";
 

@@ -1,4 +1,4 @@
-import trimObject from "../lib/trimObject";
+import trimObject from "../lib/private/util/trimObject";
 
 const original = "original!";
 const mutated = "mutated!";

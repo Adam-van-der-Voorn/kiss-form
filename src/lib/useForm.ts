@@ -1,8 +1,8 @@
 import { FormEvent, useCallback, useMemo, useState } from 'react';
-import getKeysFromObject from './getKeysFromObject';
-import getNestedValue from './getNestedValue';
-import { getSuperKeys } from './keyfinders';
-import setNestedValue from './setNestedValue';
+import getKeysFromObject from './private/util/getKeysFromObject';
+import getNestedValue from './private/util/getNestedValue';
+import { getSuperKeys } from './private/util/keyfinders';
+import setNestedValue from './private/util/setNestedValue';
 import { Nested } from './types/Nested';
 import { Submit } from './types/useFormTypes';
 

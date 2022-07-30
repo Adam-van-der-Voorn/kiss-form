@@ -1,4 +1,4 @@
-import isObj from "./util/isObj";
+import isObj from "./isObj";
 
 export default function getKeysFromObject(obj: Record<string, any>) {
     return _getKeysFromObject(obj, undefined);

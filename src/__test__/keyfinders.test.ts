@@ -1,4 +1,4 @@
-import { getRelatedKeys, getSuperKeys } from "../lib/keyfinders";
+import { getRelatedKeys, getSuperKeys } from "../lib/private/util/keyfinders";
 
 const others = [
     'a.b.c',
