@@ -9,7 +9,7 @@ describe('memo', () => {
     cy.get('#favourites-state')
       .contains(JSON.stringify(expected));
   });
-  it('only renders memoised component when needed', () => {
+  it('only renders memoised component when needed - favs', () => {
     let renderCounts = {};
     const getCounts = (counts) => ({
       root: parseInt(counts.filter('#root').text()),
@@ -39,6 +39,38 @@ describe('memo', () => {
       cy.log(JSON.stringify(newRenderCounts));
       expect(newRenderCounts.root).to.be.greaterThan(renderCounts.root);
       expect(newRenderCounts.favs).to.equal(newRenderCounts.favs);
+    });
+  });
+  it('only renders memoised component when needed - email', () => {
+    let renderCounts = {};
+    const getCounts = (counts) => ({
+      root: parseInt(counts.filter('#root').text()),
+      email: parseInt(counts.filter('#email').text())
+    });
+
+    cy.visit('/');
+    cy.get('.render-count').then(counts => {
+      renderCounts = getCounts(counts);
+      cy.log(JSON.stringify(renderCounts));
+    });
+
+    cy.get('input[name="email.work"]')
+      .type("a@v");
+    cy.get('.render-count').then(counts => {
+      const newRenderCounts = getCounts(counts);
+      cy.log(JSON.stringify(newRenderCounts));
+      expect(newRenderCounts.root).to.be.greaterThan(renderCounts.root);
+      expect(newRenderCounts.email).to.be.greaterThan(renderCounts.email);
+      renderCounts = newRenderCounts;
+    });
+
+    cy.get('input[name=name]')
+      .type("someone");
+    cy.get('.render-count').then(counts => {
+      const newRenderCounts = getCounts(counts);
+      cy.log(JSON.stringify(newRenderCounts));
+      expect(newRenderCounts.root).to.be.greaterThan(renderCounts.root);
+      expect(newRenderCounts.email).to.equal(newRenderCounts.email);
     });
   });
   it('memoised input recieved state change', () => {

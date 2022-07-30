@@ -1,4 +1,4 @@
-import { FormEvent, useCallback, useState } from 'react';
+import { FormEvent, useCallback, useMemo, useState } from 'react';
 import getKeysFromObject from './getKeysFromObject';
 import getNestedValue from './getNestedValue';
 import { getSuperKeys } from './keyfinders';
@@ -38,9 +38,9 @@ export default function useForm<FormInput extends Record<string, any>>(initialDa
         onSubmit(formState);
     };
 
-    const form = {
+    const form = useMemo(() => ({
         setFormState
-    };
+    }), [setFormState]);
 
     return { formState, register, setFormState, handleSubmit, form };
 }
