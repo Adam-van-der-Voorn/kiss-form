@@ -4,7 +4,7 @@ export default function getKeysFromObject(obj: Record<string, any>) {
     return _getKeysFromObject(obj, undefined);
 }
 
-function _getKeysFromObject(obj: Record<string, any>, prefix: string) {
+function _getKeysFromObject(obj: Record<string, any>, prefix?: string) {
     const keys: string[] = [];
     for (const [key, value] of Object.entries(obj)) {
         const fullKey = prefix

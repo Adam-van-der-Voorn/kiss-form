@@ -9,6 +9,7 @@
         "outDir": "./dist/",
         "noImplicitAny": true,
         "noEmitOnError": true,
+        "strict": true,
         "jsx": "react",
         "module": "es2015",
     }

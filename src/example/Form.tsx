@@ -22,7 +22,7 @@ export type FormInput = typeof initialData;
 
 function Form() {
 
-    const [submittedData, setSubmittedData] = useState(null);
+    const [submittedData, setSubmittedData] = useState<any>(null);
 
     const renderCount = useRenderCounter('root');
 
@@ -34,7 +34,9 @@ function Form() {
     useEffect(() => {
         document.querySelectorAll('input').forEach(input => {
             const name = input.getAttribute('name');
-            input.setAttribute('placeholder', name);
+            if (name) {
+                input.setAttribute('placeholder', name);
+            }
         });
     });
 
