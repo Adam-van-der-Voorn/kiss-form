@@ -15,7 +15,7 @@ describe('memo', () => {
       root: parseInt(counts.filter('#root').text()),
       favs: parseInt(counts.filter('#favs').text())
     });
-    
+
     cy.visit('/');
     cy.get('.render-count').then(counts => {
       renderCounts = getCounts(counts);
@@ -40,5 +40,15 @@ describe('memo', () => {
       expect(newRenderCounts.root).to.be.greaterThan(renderCounts.root);
       expect(newRenderCounts.favs).to.equal(newRenderCounts.favs);
     });
+  });
+  it('memoised input recieved state change', () => {
+    cy.visit('/');
+    cy.get('input[name="email.work"]')
+      .type("anything");
+    cy.get('[data-cy=clear-email]')
+      .click();
+    cy.get('input[name="email.work"]')
+      .invoke('attr', 'value')
+      .should('equal', "")
   });
 });

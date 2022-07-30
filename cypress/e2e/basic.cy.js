@@ -43,4 +43,13 @@ describe('basic', () => {
     cy.get('#submitted-data')
       .innerHTMLEqualsObj(expected);
   });
+  it('updates state via a button', () => {
+    cy.visit('/');
+    cy.get('input[name="email.work"]')
+      .type("anything");
+    cy.get('[data-cy=clear-email]')
+      .click();
+    cy.get('#form-state')
+      .innerHTMLEqualsObj({});
+  });
 });
