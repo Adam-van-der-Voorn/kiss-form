@@ -38,5 +38,9 @@ export default function useForm<FormInput>(initialData: FormInput, onSubmit: Sub
         onSubmit(formState);
     };
 
-    return { formState, register, setFormState, handleSubmit };
+    const form = {
+        setFormState
+    }
+
+    return { formState, register, setFormState, handleSubmit, form };
 }

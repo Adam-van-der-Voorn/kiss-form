@@ -1,26 +1,27 @@
 import React, { memo, useCallback } from "react";
+import getFormPartition from "../lib/getFormPartition";
 import useRenderCounter from "./util/useRenderCounter";
 
 type Props = {
-    register: any;
-    setFormState: any;
+    form: any;
     email: any;
 };
 
-function Emails({ register, setFormState, email }: Props) {
+function Emails({ form, email }: Props) {
     const renderCount = useRenderCounter('email');
+    const { register, setPartitionState } = getFormPartition('email', form)
 
     const clear = useCallback(() => {
-        setFormState('email', {
+        setPartitionState('', {
             work: '',
             personal: ''
         });
-    }, [setFormState]);
+    }, [setPartitionState]);
 
     return (
         <div className="nested">
-            <input type="text" value={email.work} {...register("email.work")} autoComplete="off" />
-            <input type="text" value={email.personal} {...register("email.personal")} autoComplete="off" />
+            <input type="text" value={email.work} {...register("work")} autoComplete="off" />
+            <input type="text" value={email.personal} {...register("personal")} autoComplete="off" />
             <button type="button" data-cy="clear-email" onClick={clear}>Clear</button>
             {renderCount}
         </div>

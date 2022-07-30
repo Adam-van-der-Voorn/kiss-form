@@ -38,7 +38,7 @@ function Form() {
         });
     });
 
-    const { formState, register, setFormState, handleSubmit } = useForm(initialData, onSubmit);
+    const { formState, register, setFormState, handleSubmit, form} = useForm(initialData, onSubmit);
 
     return (
         <form onSubmit={handleSubmit}>
@@ -47,7 +47,7 @@ function Form() {
                 <input type="text" {...register("name")} autoComplete="off" />
                 <input type="number" {...register("age")} />
             </div>
-            <Emails {...{ register, setFormState }} email={formState.email} />
+            <Emails form={form} email={formState.email} />
             <Favourites register={register} favourites={formState.fav} />
             <pre id="form-state">
                 {JSON.stringify(trimObject(formState), null, 2)}
