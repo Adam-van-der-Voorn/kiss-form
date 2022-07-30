@@ -1,8 +1,8 @@
 import isObj from "./util/isObj";
 import objIsEmpty from "./util/objIsEmpty";
 
-export default function trimObject(obj: any): any {
-    let newObj: any = {};
+export default function trimObject(obj: Record<string, any>): Record<string, any> {
+    let newObj: Record<string, any> = {};
     for (const [key, value] of Object.entries(obj)) {
         if (isObj(value)) {
             const trimmed = trimObject(value);

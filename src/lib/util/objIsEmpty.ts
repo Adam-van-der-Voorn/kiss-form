@@ -1,3 +1,3 @@
-export default function objIsEmpty(obj: any) {
+export default function objIsEmpty(obj: Record<string, any>) {
     return Object.keys(obj).length === 0;
 }

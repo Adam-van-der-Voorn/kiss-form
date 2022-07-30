@@ -1,10 +1,12 @@
 import React, { memo, useCallback } from "react";
 import getFormPartition from "../lib/getFormPartition";
+import { FormInterface } from "../lib/types/useFormTypes";
+import { FormInput } from "./Form";
 import useRenderCounter from "./util/useRenderCounter";
 
 type Props = {
-    form: any;
-    email: any;
+    form: FormInterface<FormInput>;
+    email: FormInput['email'];
 };
 
 function Emails({ form, email }: Props) {

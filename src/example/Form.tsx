@@ -18,7 +18,7 @@ const initialData = {
     }
 };
 
-type FormInput = typeof initialData;
+export type FormInput = typeof initialData;
 
 function Form() {
 

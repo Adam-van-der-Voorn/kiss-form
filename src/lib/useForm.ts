@@ -3,19 +3,19 @@ import getKeysFromObject from './getKeysFromObject';
 import getNestedValue from './getNestedValue';
 import { getSuperKeys } from './keyfinders';
 import setNestedValue from './setNestedValue';
+import { Nested } from './types/Nested';
+import { Submit } from './types/useFormTypes';
 
-type Submit<T> = ((formInput: T) => Promise<void>) | ((formInput: T) => void);
-
-export default function useForm<FormInput>(initialData: FormInput, onSubmit: Submit<FormInput> /*, config, validation, */) {
+export default function useForm<FormInput extends Record<string, any>>(initialData: FormInput, onSubmit: Submit<FormInput> /*, config, validation, */) {
     const [formState, _setFormState] = useState(initialData);
     const [records, setRecords] = useState<string[]>(getKeysFromObject(initialData));
 
-    const setFormState = useCallback((name: string, val: any) => {
+    const setFormState = useCallback((name: string, val: Nested<FormInput>) => {
         _setFormState((state: FormInput) => {
             const keys = getSuperKeys(name, records);
             for (const key of keys) {
-                const val = getNestedValue(state, key);
-                const clone = { ...val };
+                const nestedVal = getNestedValue(state, key);
+                const clone = { ...nestedVal };
                 setNestedValue(state, key, clone);
             }
             setNestedValue(state, name, val);
@@ -24,11 +24,11 @@ export default function useForm<FormInput>(initialData: FormInput, onSubmit: Sub
         });
     }, [_setFormState, records]);
 
-    const register = useCallback((name: string): any => {
+    const register = useCallback((name: string) => {
         return {
             name: name,
             onChange: (ev: FormEvent<HTMLInputElement>) => {
-                setFormState(name, ev.currentTarget.value);
+                setFormState(name, ev.currentTarget.value as any);
             }
         };
     }, [setFormState]);
@@ -40,7 +40,7 @@ export default function useForm<FormInput>(initialData: FormInput, onSubmit: Sub
 
     const form = {
         setFormState
-    }
+    };
 
     return { formState, register, setFormState, handleSubmit, form };
 }

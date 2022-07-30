@@ -1,9 +1,10 @@
 import React, { memo } from "react";
+import { FormInput } from "./Form";
 import useRenderCounter from "./util/useRenderCounter";
 
 type Props = {
     register: any;
-    favourites: any;
+    favourites: FormInput['fav'];
 };
 
 function Favourites({ register, favourites }: Props) {

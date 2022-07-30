@@ -8,6 +8,7 @@
         "esModuleInterop": true,
         "outDir": "./dist/",
         "noImplicitAny": true,
+        "noEmitOnError": true,
         "jsx": "react",
         "module": "es2015",
     }
