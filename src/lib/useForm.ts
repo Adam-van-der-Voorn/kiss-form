@@ -12,6 +12,9 @@ export default function useForm<FormInput extends Record<string, any>>(initialDa
 
     const setFormState = useCallback((name: string, val: Nested<FormInput>) => {
         _setFormState((state: FormInput) => {
+            if (name === '') {
+                return val;
+            }
             const keys = getSuperKeys(name, records);
             for (const key of keys) {
                 const nestedVal = getNestedValue(state, key);
