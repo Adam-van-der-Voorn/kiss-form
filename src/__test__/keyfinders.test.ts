@@ -85,13 +85,13 @@ test.each([
         ['a']
     ],
     ['a.e.2',
-        ['a']
+        ['a.e', 'a']
     ],
     ['a.e.3.f.g',
-        ['a']
+        ['a.e.3.f', 'a.e.3', 'a.e', 'a']
     ]
 ])('test getSuperKeys: %p', (key, expected) => {
-    const keys = getSuperKeys(key, others);
+    const keys = getSuperKeys(key);
     expected.sort();
     keys.sort();
     expect(keys).toStrictEqual(expected);

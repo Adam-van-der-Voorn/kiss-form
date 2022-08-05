@@ -1,31 +1,31 @@
 import { FormEvent, useCallback, useMemo, useState } from 'react';
-import getKeysFromObject from './private/util/getKeysFromObject';
 import getNestedValue from './private/util/getNestedValue';
 import { getSuperKeys } from './private/util/keyfinders';
 import setNestedValue from './private/util/setNestedValue';
+import { shallowCopy } from './private/util/shallowCopy';
+import { Collection } from './types/Collection';
 import { Nested } from './types/Nested';
-import { Submit } from './types/useFormTypes';
+import { FormInterface, Submit } from './types/useFormTypes';
 
 export default function useForm<FormInput extends Record<string, any>>(initialData: FormInput, onSubmit: Submit<FormInput> /*, config, validation, */) {
     const [formState, _setFormState] = useState(initialData);
-    const [records, setRecords] = useState<string[]>(getKeysFromObject(initialData));
 
     const setFormState = useCallback((name: string, val: Nested<FormInput>) => {
-        _setFormState((state: FormInput) => {
+        _setFormState((oldState: FormInput) => {
             if (name === '') {
                 return val;
             }
-            const keys = getSuperKeys(name, records);
-            for (const key of keys) {
-                const nestedVal = getNestedValue(state, key);
-                const clone = { ...nestedVal };
-                setNestedValue(state, key, clone);
+            const superNames = getSuperKeys(name);
+            const newState: FormInput = shallowCopy(oldState);
+            for (const currentName of superNames) {
+                // we know it is a Collection because it is a <<super>>name
+                const currentVal = getNestedValue(oldState, currentName) as Collection;
+                setNestedValue(newState, currentName, shallowCopy(currentVal));
             }
-            setNestedValue(state, name, val);
-            // may want to set records here for arrays etc in the future...
-            return { ...state };
+            setNestedValue(newState, name, val);
+            return newState;
         });
-    }, [_setFormState, records]);
+    }, [_setFormState]);
 
     const register = useCallback((name: string) => {
         return {
@@ -41,9 +41,10 @@ export default function useForm<FormInput extends Record<string, any>>(initialDa
         onSubmit(formState);
     };
 
-    const form = useMemo(() => ({
-        setFormState
-    }), [setFormState]);
+    const form: FormInterface<FormInput> = useMemo(() => ({
+        setFormState,
+        register
+    }), [setFormState, register]);
 
     return { formState, register, setFormState, handleSubmit, form };
 }

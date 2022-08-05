@@ -11,5 +11,16 @@ test('mutate', () => {
         }
     };
     setNestedValue(obj, 'a.b', mutated)
-    expect(obj.a.b).toBe(mutated);
+    expect(obj.a.b).toStrictEqual(mutated);
+});
+
+test('array indicies', () => {
+    const obj = {
+        a: {
+            b: [original, original]
+        }
+    };
+    setNestedValue(obj, 'a.b.0', mutated)
+    setNestedValue(obj, 'a.b.1', mutated)
+    expect(obj.a.b).toStrictEqual([mutated, mutated]);
 });

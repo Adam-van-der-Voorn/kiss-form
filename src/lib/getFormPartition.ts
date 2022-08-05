@@ -3,7 +3,7 @@ import { Nested } from './types/Nested';
 import { FormInterface } from './types/useFormTypes';
 
 export default function getFormPartition<FormInput extends Record<string, any>>(name: string, form: FormInterface<FormInput>) {
-    const { setFormState } = form;
+    const { setFormState, register } = form;
 
     const _getFullName = useCallback((subname: string) => {
         return subname.length > 1
@@ -16,15 +16,10 @@ export default function getFormPartition<FormInput extends Record<string, any>>(
         setFormState(fullName, value);
     }, [name, setFormState, _getFullName]);
 
-    const register = useCallback((subname: string) => {
+    const registerPartition = useCallback((subname: string) => {
         const fullName = _getFullName(subname);
-        return {
-            name: fullName,
-            onChange: (ev: FormEvent<HTMLInputElement>) => {
-                setPartitionState(subname, ev.currentTarget.value as any);
-            }
-        };
+        return register(fullName)
     }, [name, setFormState, _getFullName]);
 
-    return { register, setPartitionState };
+    return { registerPartition, setPartitionState };
 }

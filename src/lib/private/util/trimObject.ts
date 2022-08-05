@@ -10,7 +10,7 @@ export default function trimObject(obj: Record<string, any>): Record<string, any
                 newObj[key] = trimmed;
             }
         }
-        if (typeof value === 'string' && value.length > 0) {
+        if ((typeof value === 'string' || Array.isArray(value)) && value.length > 0) {
             newObj[key] = value;
         }
     }

@@ -14,7 +14,8 @@ const initialData = {
         work: ""
     },
     fav: {
-        fruit: ""
+        fruit: "",
+        pokerHands: [] as { a: string, b: string }[]
     }
 };
 
@@ -50,7 +51,7 @@ function Form() {
                 <input type="number" {...register("age")} />
             </div>
             <Emails form={form} email={formState.email} />
-            <Favourites register={register} favourites={formState.fav} />
+            <Favourites form={form} favourites={formState.fav} />
             <pre id="form-state">
                 {JSON.stringify(trimObject(formState), null, 2)}
             </pre>

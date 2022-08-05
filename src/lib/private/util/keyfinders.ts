@@ -6,24 +6,14 @@ export function getRelatedKeys(key: string, others: string[]) {
     });
 }
 
-export function getSuperKeys(key: string, others: string[]) {
+export function getSuperKeys(key: string): string[] {
     const keySplit = key.split('.');
-    return others.filter((other: string) => {
-        const otherSplit = other.split('.');
-        return isSuperKey(keySplit, otherSplit);
-    });
-}
-
-function isSuperKey(key: string[], other: string[]) {
-    if (other.length >= key.length) {
-        return false;
+    const superKeys = [];
+    for (let i = 1; i < keySplit.length; i ++) {
+        const superKey = keySplit.slice(0, i).join('.');
+        superKeys.push(superKey)
     }
-    for (let i = 0; i < other.length; i++) {
-        if (key[i] !== other[i]) {
-            return false;
-        }
-    }
-    return true;
+    return superKeys;
 }
 
 function isRelatedKey(key: string[], other: string[]) {
