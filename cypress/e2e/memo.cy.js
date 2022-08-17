@@ -176,7 +176,7 @@ describe.only('only render memoised component when needed', () => {
     getRenderCounts(['poker-hand-0', 'poker-hand-1'])
       .then(newRenderCounts => {
         expect(newRenderCounts['poker-hand-0']).to.be.greaterThan(renderCounts['poker-hand-0']);
-        expect(newRenderCounts['poker-hand-1']).to.equal(renderCounts[['poker-hand-1']]);
+        expect(newRenderCounts['poker-hand-1']).to.equal(renderCounts['poker-hand-1']);
       });
   });
 });

@@ -1,8 +1,8 @@
 import { FormEvent } from "react";
-import { Nested } from "./Nested";
+import { SetFormStateAction } from "./setFormStateAction";
 
 export type FormInterface<T> = {
-    setFormState: (name: string, val: Nested<T>) => void,
+    setFormState: (name: string, val: SetFormStateAction<T>) => void,
     register: Register;
 };
 

@@ -14,8 +14,8 @@ type Props = {
 
 function Favourites({ form, favourites }: Props) {
     const renderCount = useRenderCounter('favs');
-    const { registerPartition, setPartitionState } = getFormPartition('fav', form);
-    const { push, remove, replace } = arrayFunctions<FormInput>('pokerHands', favourites.pokerHands, setPartitionState);
+    const { registerPartition, partition } = getFormPartition('fav', form);
+    const { push, remove, replace } = arrayFunctions<FormInput>('pokerHands', partition);
 
     return (
         <div className="nested">
