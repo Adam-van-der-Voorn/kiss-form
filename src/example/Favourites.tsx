@@ -15,7 +15,7 @@ type Props = {
 function Favourites({ form, favourites }: Props) {
     const renderCount = useRenderCounter('favs');
     const { registerPartition, partition } = getFormPartition('fav', form);
-    const { push, remove, replace } = arrayFunctions<FormInput>('pokerHands', partition);
+    const { push, remove, replace, insert } = arrayFunctions<FormInput>('pokerHands', partition);
 
     return (
         <div className="nested">
@@ -26,7 +26,7 @@ function Favourites({ form, favourites }: Props) {
             {favourites.pokerHands.map((hand, idx) => {
                 return <PokerHand key={idx}
                     register={registerPartition}
-                    {...{ hand, idx, remove }}
+                    {...{ hand, idx, remove, insert }}
                 />;
             })}
             <button type="button" data-cy="push-hand" onClick={() => push({a: "", b: ""})}>Add poker hand</button>

@@ -27,5 +27,14 @@ export default function arrayFunctions<FormInput extends Record<string, any>>(
         });
     }, [setState]);
 
-    return { replace, push, remove };
+    const insert = useCallback((idx: number, value: Nested<FormInput>) => {
+        setState(subname, (oldArr: any) => {
+            console.log("insert b4:", oldArr);
+            const newArr = [...oldArr.slice(0, idx), value, ...oldArr.slice(idx)]
+            console.log("insert after:", newArr)
+            return newArr as any;
+        });
+    }, [setState]);
+
+    return { replace, push, remove, insert };
 }
