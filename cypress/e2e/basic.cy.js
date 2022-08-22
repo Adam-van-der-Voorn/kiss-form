@@ -54,97 +54,58 @@ describe('basic', () => {
   });
 });
 
-describe('arrays', () => {
-  const favHand = {
-    a: "K♦",
-    b: "A♠"
+describe.only('initial state', () => {
+  const initialState = {
+    "name": "Joan of arc",
+    "age": "14",
+    "email": {
+      "personal": "joan@god.nz",
+      "work": "joan@france.fr"
+    },
+    "fav": {
+      "fruit": "Apple",
+      "pokerHands": [
+        {
+          "a": "2♦",
+          "b": "7♦"
+        },
+        {
+          "a": "K♦",
+          "b": "A♠"
+        }
+      ]
+    }
   };
 
-  const emptyhand = { a: '', b: '' };
-  it('can add, edit, and remove an item in the array, and clear the whole array', () => {
-    cy.visit('/');
-
-    // add items
-    cy.get("[data-cy=push-hand]")
-      .click()
-      .click()
-      .click();
-    cy.get(`[name^="fav.pokerHands"]`)
-      // two fields each array entry
-      .should('have.length', 6);
-
-    // edit items
-    cy.get(`[name^="fav.pokerHands.0.a"]`)
-      .type(favHand.a);
-    cy.get(`[name^="fav.pokerHands.0.b"]`)
-      .type(favHand.b);
-    cy.get("#favourites-state")
-      .innerHTMLEqualsObj({ pokerHands: [favHand, emptyhand, emptyhand] });
-
-    // remove items
-    cy.get("[data-cy=remove-hand-0]")
-      .click();
-    cy.get(`[name^="fav.pokerHands"]`)
-      // two fields each array entry
-      .should('have.length', 4);
-    cy.get("#favourites-state")
-      .innerHTMLEqualsObj({ pokerHands: [emptyhand, emptyhand] });
-
-    // clear items
-    cy.get("[data-cy=clear-hands]")
-      .click();
-    cy.get(`[name^="fav.pokerHands"]`)
-      .should('have.length', 0);
+  it('has the correct state', () => {
+    cy.visit(`/?state=${encodeURIComponent(JSON.stringify(initialState))}`);
+    cy.get('#form-state')
+      .innerHTMLEqualsObj(initialState);
   });
 
-  it('can add, edit, and insert items into the  array', () => {
-    cy.visit('/');
+  it('has filled the inputs', () => {
+    cy.visit(`/?state=${encodeURIComponent(JSON.stringify(initialState))}`);
 
-    // add items
-    cy.get("[data-cy=push-hand]")
-      .click()
-      .click();
-    cy.get(`[name^="fav.pokerHands"]`)
-      // two fields each array entry
-      .should('have.length', 4);
+    cy.get(`[name="name"]`)
+      .invoke('attr', 'value').should('equal', initialState.name);
+    cy.get(`[name="age"]`)
+      .invoke('attr', 'value').should('equal', initialState.age);
 
-    // edit items
+    cy.get(`[name="email.personal"]`)
+      .invoke('attr', 'value').should('equal', initialState.email.personal);
+    cy.get(`[name="email.work"]`)
+      .invoke('attr', 'value').should('equal', initialState.email.work);
+
+    cy.get(`[name="fav.fruit"]`)
+      .invoke('attr', 'value').should('equal', initialState.fav.fruit);
+
     cy.get(`[name^="fav.pokerHands.0.a"]`)
-      .type(favHand.a);
+      .invoke('attr', 'value').should('equal', initialState.fav.pokerHands[0].a);
     cy.get(`[name^="fav.pokerHands.0.b"]`)
-      .type(favHand.b);
-    cy.get("#favourites-state")
-      .innerHTMLEqualsObj({ pokerHands: [favHand, emptyhand] });
-
-    // insert items
-    cy.get("[data-cy=insert-above-hand-0]")
-      .click();
-    cy.get(`[name^="fav.pokerHands.0"]`)
-      .invoke('attr', 'value')
-      .should('equal', '');
+      .invoke('attr', 'value').should('equal', initialState.fav.pokerHands[0].b);
     cy.get(`[name^="fav.pokerHands.1.a"]`)
-      .invoke('attr', 'value')
-      .should('equal', favHand.a);
+      .invoke('attr', 'value').should('equal', initialState.fav.pokerHands[1].a);
     cy.get(`[name^="fav.pokerHands.1.b"]`)
-      .invoke('attr', 'value')
-      .should('equal', favHand.b);
-    cy.get(`[name^="fav.pokerHands"]`)
-      // two fields each array entry
-      .should('have.length', 6);
-
-    cy.get("[data-cy=insert-above-hand-2]")
-      .click();
-    cy.get(`[name^="fav.pokerHands.2"]`)
-      .invoke('attr', 'value')
-      .should('equal', '');
-    cy.get(`[name^="fav.pokerHands.1.a"]`)
-      .invoke('attr', 'value')
-      .should('equal', favHand.a);
-    cy.get(`[name^="fav.pokerHands.1.b"]`)
-      .invoke('attr', 'value')
-      .should('equal', favHand.b);
-    cy.get(`[name^="fav.pokerHands"]`)
-      // two fields each array entry
-      .should('have.length', 8);
+      .invoke('attr', 'value').should('equal', initialState.fav.pokerHands[1].b);
   });
 });
