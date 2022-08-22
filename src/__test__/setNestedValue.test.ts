@@ -1,4 +1,4 @@
-import setNestedValue from "../lib/private/util/setNestedValue";
+import setNestedValue from "../lib/object-state/util/setNestedValue";
 
 const original = "original!";
 const mutated = "mutated!";

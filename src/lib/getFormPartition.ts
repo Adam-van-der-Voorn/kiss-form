@@ -1,6 +1,4 @@
 import { useCallback, useMemo } from 'react';
-import getNestedValue from './private/util/getNestedValue';
-import { Nested } from './types/Nested';
 import { SetFormStateAction } from './types/setFormStateAction';
 import { FormInterface } from './types/useFormTypes';
 
@@ -15,12 +13,7 @@ export default function getFormPartition<FormInput extends Record<string, any>>(
 
     const setPartitionState = useCallback((subname: string, val: SetFormStateAction<FormInput>) => {
         const fullName = _getFullName(subname);
-        setFormState(fullName, (prevState: FormInput) => {
-            if (val instanceof Function) {
-                val = val(getNestedValue(prevState, fullName) as Nested<FormInput>);
-            }
-            return val as Nested<FormInput>;
-        });
+        setFormState(fullName, val);
     }, [name, setFormState, _getFullName]);
 
     const registerPartition = useCallback((subname: string) => {

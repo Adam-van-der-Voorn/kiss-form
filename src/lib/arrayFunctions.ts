@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { Nested } from './types/Nested';
+import { Nested } from './object-state/types/Nested';
 import { FormInterface } from './types/useFormTypes';
 
 export default function arrayFunctions<FormInput extends Record<string, any>>(
@@ -15,7 +15,8 @@ export default function arrayFunctions<FormInput extends Record<string, any>>(
 
     const push = useCallback((value: Nested<FormInput>) => {
         setState(subname, (oldArr: any) => {
-            return [...oldArr, value] as any;
+            const newArr = [...oldArr, value];
+            return newArr as any;
         });
     }, [setState]);
 
