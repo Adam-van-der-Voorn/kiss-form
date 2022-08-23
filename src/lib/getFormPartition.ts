@@ -3,7 +3,7 @@ import { SetFormStateAction } from './types/setFormStateAction';
 import { FormInterface } from './types/useFormTypes';
 
 export default function getFormPartition<FormInput extends Record<string, any>>(name: string, form: FormInterface<FormInput>) {
-    const { setFormState, register } = form;
+    const { setFormState, register, setTouched } = form;
 
     const _getFullName = useCallback((subname: string) => {
         return subname.length > 1
@@ -16,6 +16,11 @@ export default function getFormPartition<FormInput extends Record<string, any>>(
         setFormState(fullName, val);
     }, [name, setFormState, _getFullName]);
 
+    const setPartitionTouched = useCallback((subname: string, val: any) => {
+        const fullName = _getFullName(subname);
+        setTouched(fullName, val)
+    }, [name, setTouched, _getFullName])
+
     const registerPartition = useCallback((subname: string) => {
         const fullName = _getFullName(subname);
         return register(fullName);
@@ -23,7 +28,8 @@ export default function getFormPartition<FormInput extends Record<string, any>>(
 
     const partition: FormInterface<FormInput> = useMemo(() => ({
         setFormState: setPartitionState,
-        register: registerPartition
+        register: registerPartition,
+        setTouched: setPartitionTouched,
     }), [setPartitionState])
 
     return { registerPartition, setPartitionState, partition };

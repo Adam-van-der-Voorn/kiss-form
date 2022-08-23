@@ -49,7 +49,7 @@ function Form({initialData}: Props) {
         });
     });
 
-    const { formState, register, setFormState, handleSubmit, form } = useForm(initialData, onSubmit);
+    const { formState, register, setFormState, handleSubmit, touched, form } = useForm(initialData, onSubmit);
 
     return (
         <form onSubmit={handleSubmit}>
@@ -64,6 +64,9 @@ function Form({initialData}: Props) {
                 {JSON.stringify(trimObject(formState), null, 2)}
             </pre>
             <input type="submit" />
+            <pre id="form-touched">
+                {JSON.stringify(touched, null, 2)}
+            </pre>
             <pre id="submitted-data">
                 {JSON.stringify(submittedData, null, 2)}
             </pre>

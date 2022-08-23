@@ -1,4 +1,7 @@
 /// <reference types="cypress" />
+
+import getNestedValue from '../../src/lib/object-state/util/getNestedValue';
+
 // ***********************************************
 // This example commands.ts shows you how to
 // create various custom commands and overwrite
@@ -36,10 +39,13 @@
 //   }
 // }
 
-Cypress.Commands.add('innerHTMLEqualsObj' as any, { prevSubject: true }, (subject, obj) => {
+Cypress.Commands.add('innerHTMLEqualsObj', { prevSubject: true }, (subject, obj, key) => {
   console.log("innerHTMLEqualsObj:");
-  const innerObj = JSON.parse(subject.text());
-  console.log({ innerHTML: subject.text(), innerObj, inputObj: obj });
+  let innerObj = JSON.parse(subject.text());
+  if (key) {
+    innerObj = getNestedValue(innerObj, key);
+  }
+  console.log({ innerHTML: subject.text(), innerObj, inputObj: obj, key });
   expect(innerObj).to.deep.equal(obj);
   return subject;
 });

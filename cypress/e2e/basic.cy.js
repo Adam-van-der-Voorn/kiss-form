@@ -54,7 +54,7 @@ describe('basic', () => {
   });
 });
 
-describe.only('initial state', () => {
+describe('initial state', () => {
   const initialState = {
     "name": "Joan of arc",
     "age": "14",
@@ -109,3 +109,25 @@ describe.only('initial state', () => {
       .invoke('attr', 'value').should('equal', initialState.fav.pokerHands[1].b);
   });
 });
+
+describe('touched and dirty', () => {
+  it('can register a field being touched', () => {
+    cy.visit('/');
+
+    cy.get("#form-touched")
+      .innerHTMLEqualsObj(false, 'name')
+      .innerHTMLEqualsObj(false, 'age');
+
+
+    cy.log("clicking in and out of name field");
+    cy.get(`[name="name"]`)
+      .click();
+    cy.get('body')
+      .click(3, 3);
+
+    cy.get("#form-touched")
+      .innerHTMLEqualsObj(true, 'name')
+      .innerHTMLEqualsObj(false, 'age');
+
+  });
+})
