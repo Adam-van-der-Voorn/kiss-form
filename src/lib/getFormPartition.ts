@@ -1,15 +1,18 @@
 import { useCallback, useMemo } from 'react';
+import getNestedValue from './object-state/util/getNestedValue';
 import { SetFormStateAction } from './types/setFormStateAction';
 import { FormInterface } from './types/useFormTypes';
 
 export default function getFormPartition<FormInput extends Record<string, any>>(name: string, form: FormInterface<FormInput>) {
-    const { setFormState, register, setTouched } = form;
+    const { setFormState, register, touched, setTouched } = form;
 
     const _getFullName = useCallback((subname: string) => {
         return subname.length > 1
             ? `${name}.${subname}`
             : name;
     }, [name]);
+
+    const partitionTouched = getNestedValue(touched, name)
 
     const setPartitionState = useCallback((subname: string, val: SetFormStateAction<FormInput>) => {
         const fullName = _getFullName(subname);
@@ -29,8 +32,9 @@ export default function getFormPartition<FormInput extends Record<string, any>>(
     const partition: FormInterface<FormInput> = useMemo(() => ({
         setFormState: setPartitionState,
         register: registerPartition,
+        touched: partitionTouched as any,
         setTouched: setPartitionTouched,
-    }), [setPartitionState])
+    }), [ setPartitionState, registerPartition, partitionTouched, setTouched])
 
-    return { registerPartition, setPartitionState, partition };
+    return { registerPartition, setPartitionState, partitionTouched, partition };
 }

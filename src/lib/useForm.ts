@@ -26,10 +26,11 @@ export default function useForm<FormInput extends Record<string, any>>(initialDa
     };
 
     const form: FormInterface<FormInput> = useMemo(() => ({
+        touched,
         setTouched,
         setFormState,
         register
-    }), [setFormState, register, setTouched]);
+    }), [setFormState, register, touched, setTouched]);
 
     return { formState, touched: touched as Flooded<FormInput, boolean>, register, setFormState, handleSubmit, form };
 }
