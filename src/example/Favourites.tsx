@@ -14,18 +14,18 @@ type Props = {
 
 function Favourites({ form, favourites }: Props) {
     const renderCount = useRenderCounter('favs');
-    const { registerPartition, partition } = getFormPartition('fav', form);
+    const partition = getFormPartition('fav', form);
     const { push, remove, replace, insert } = arrayFunctions<FormInput>('pokerHands', partition);
 
     return (
         <div className="nested">
             <p>Your favourites are <span id="favourites-state">{JSON.stringify(trimObject(favourites))}</span>!</p>
             <div>
-                <input type="text" value={favourites.fruit}{...registerPartition("fruit")} autoComplete="off" />
+                <input type="text" value={favourites.fruit}{...partition.register("fruit")} autoComplete="off" />
             </div>
             {favourites.pokerHands.map((hand, idx) => {
                 return <PokerHand key={idx}
-                    register={registerPartition}
+                    register={partition.register}
                     {...{ hand, idx, remove, insert }}
                 />;
             })}

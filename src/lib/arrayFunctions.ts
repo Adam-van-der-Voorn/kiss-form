@@ -8,7 +8,7 @@ export default function arrayFunctions<FormInput extends Record<string, any>>(
     formInterface: FormInterface<FormInput>
 ) {
 
-    const { setFormState: setState, setTouched } = formInterface;
+    const { setState, setTouched } = formInterface;
 
     const _push = (arr: any, value: any) => {
         const newArr = [...arr, value];

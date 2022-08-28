@@ -1,4 +1,4 @@
-import { Flooded } from "../../types/flooded";
+import { Flooded } from "../../types/Flooded";
 import isObj from "./isObj";
 
 export default function flood<T, F>(x: T, valueToFlood: F): Flooded<T, F> {

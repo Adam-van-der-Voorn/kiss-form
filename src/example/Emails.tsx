@@ -11,19 +11,19 @@ type Props = {
 
 function Emails({ form, email }: Props) {
     const renderCount = useRenderCounter('email');
-    const { registerPartition, setPartitionState } = getFormPartition('email', form)
+    const partition = getFormPartition('email', form)
 
     const clear = useCallback(() => {
-        setPartitionState('', {
+        partition.setState('', {
             work: '',
             personal: ''
         });
-    }, [setPartitionState]);
+    }, [partition.setState]);
 
     return (
         <div className="nested">
-            <input type="text" value={email.work} {...registerPartition("work")} autoComplete="off" />
-            <input type="text" value={email.personal} {...registerPartition("personal")} autoComplete="off" />
+            <input type="text" value={email.work} {...partition.register("work")} autoComplete="off" />
+            <input type="text" value={email.personal} {...partition.register("personal")} autoComplete="off" />
             <button type="button" data-cy="clear-email" onClick={clear}>Clear</button>
             {renderCount}
         </div>

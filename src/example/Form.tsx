@@ -49,7 +49,8 @@ function Form({initialData}: Props) {
         });
     });
 
-    const { formState, register, setFormState, handleSubmit, touched, form } = useForm(initialData, onSubmit);
+    const { state: formState, handleSubmit, form } = useForm(initialData, onSubmit);
+    const { register, touched } = form;
 
     return (
         <form onSubmit={handleSubmit}>
