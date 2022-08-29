@@ -26,6 +26,12 @@ export default function useNestedState<T>(initialState: T | (() => T)): [T, (key
                 val = val(prevState);
             }
 
+            // if the new nested value === the old nested value,
+            // we want to bail out of the state change
+            if (val === prevState) {
+                return prevFullState;
+            }
+
             // main fn body
             if (key === '') {
                 return val as T;
