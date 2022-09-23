@@ -28,22 +28,22 @@ export default function useFormArray<FormInput extends Record<string, any>>(
     const replace = useCallback((value: Extract<Nested<FormInput>, any[]>) => {
         setState(subname, value);
         setTouched(subname, flood(value, false));
-    }, [setState, setTouched]);
+    }, [subname, setState, setTouched]);
 
     const push = useCallback((value: Nested<FormInput>) => {
         setState(subname, (oldArr: any) => _push(oldArr, value));
         setTouched(subname, (oldArr: any) => _push(oldArr, flood(value, false)));
-    }, [setState, setTouched]);
+    }, [subname, setState, setTouched]);
 
     const remove = useCallback((idx: number) => {
         setState(subname, (oldArr: any) => _remove(oldArr, idx));
         setTouched(subname, (oldArr: any) => _remove(oldArr, idx));
-    }, [setState, setTouched]);
+    }, [subname, setState, setTouched]);
 
     const insert = useCallback((idx: number, value: Nested<FormInput>) => {
         setState(subname, (oldArr: any) => _insert(oldArr, idx, value));
         setTouched(subname, (oldArr: any) => _insert(oldArr, idx, flood(value, false)));
-    }, [setState, setTouched]);
+    }, [subname, setState, setTouched]);
 
     return { replace, push, remove, insert };
 }

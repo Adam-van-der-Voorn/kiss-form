@@ -12,13 +12,14 @@ type Props = {
 function Emails({ form, email }: Props) {
     const renderCount = useRenderCounter('email');
     const partition = getFormPartition('email', form);
+    const setParitionState = partition.setState;
 
     const clear = useCallback(() => {
-        partition.setState('', {
+        setParitionState('', {
             work: '',
             personal: ''
         });
-    }, [partition.setState]);
+    }, [setParitionState]);
 
     return (
         <div className="nested">

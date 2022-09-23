@@ -33,7 +33,7 @@ export default function useForm<FormInput extends Record<string, any>>(initialDa
         setTouched: setTouched as (name: string, val: SetStateAction<Flooded<Nested<FormInput>, boolean>>) => void,
         setState,
         register
-    }), [setState, register, touched]);
+    }), [setState, register, touched, setTouched]);
 
     return { state, handleSubmit, form };
 }

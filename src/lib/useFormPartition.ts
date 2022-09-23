@@ -16,7 +16,7 @@ export default function useFormPartition<K extends Record<string, any>>(name: st
     const partitionTouched = useMemo(() => {
         const fullName = _getFullName(name);
         return getNestedValue(touched, fullName) as Flooded<K, boolean>;
-    }, [name, _getFullName]);
+    }, [name, _getFullName, touched]);
 
     const setPartitionTouched = useCallback((subname: string, val: SetStateAction<Flooded<Nested<K>, boolean>>) => {
         const fullName = _getFullName(subname);
