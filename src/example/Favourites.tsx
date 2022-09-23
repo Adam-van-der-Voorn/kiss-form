@@ -1,6 +1,6 @@
 import React, { memo } from "react";
-import arrayFunctions from "../lib/arrayFunctions";
-import getFormPartition from "../lib/getFormPartition";
+import useFormArray from "../lib/useFormArray";
+import useFormPartition from "../lib/useFormPartition";
 import trimObject from "../lib/private/util/trimObject";
 import { FormInterface } from "../lib/types/useFormTypes";
 import { FormInput } from "./Form";
@@ -14,8 +14,8 @@ type Props = {
 
 function Favourites({ form, favourites }: Props) {
     const renderCount = useRenderCounter('favs');
-    const partition = getFormPartition('fav', form);
-    const { push, remove, replace, insert } = arrayFunctions<FormInput>('pokerHands', partition);
+    const partition = useFormPartition('fav', form);
+    const { push, remove, replace, insert } = useFormArray<FormInput>('pokerHands', partition);
 
     return (
         <div className="nested">

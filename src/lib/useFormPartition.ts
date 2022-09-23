@@ -4,7 +4,7 @@ import getNestedValue from './object-state/util/getNestedValue';
 import { Flooded } from './types/Flooded';
 import { FormInterface } from './types/useFormTypes';
 
-export default function getFormPartition<K extends Record<string, any>>(name: string, form: FormInterface<K>) {
+export default function useFormPartition<K extends Record<string, any>>(name: string, form: FormInterface<K>) {
     const { setState, register, touched, setTouched } = form;
 
     const _getFullName = useCallback((subname: string) => {

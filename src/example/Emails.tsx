@@ -1,5 +1,5 @@
 import React, { memo, useCallback } from "react";
-import getFormPartition from "../lib/getFormPartition";
+import getFormPartition from "../lib/useFormPartition";
 import { FormInterface } from "../lib/types/useFormTypes";
 import { FormInput } from "./Form";
 import useRenderCounter from "./util/useRenderCounter";

@@ -3,7 +3,7 @@ import { Nested } from './object-state/types/Nested';
 import { FormInterface } from './types/useFormTypes';
 import flood from './private/util/flood';
 
-export default function arrayFunctions<FormInput extends Record<string, any>>(
+export default function useFormArray<FormInput extends Record<string, any>>(
     subname: string,
     formInterface: FormInterface<FormInput>
 ) {
