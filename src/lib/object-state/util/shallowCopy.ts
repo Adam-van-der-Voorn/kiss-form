@@ -1,4 +1,4 @@
-import isObj from "../../private/util/isObj";
+import isObj from '../../private/util/isObj';
 
 export function shallowCopy<T>(x: T): T {
     if (isObj(x)) {

@@ -1,6 +1,6 @@
-import { FormEvent, SetStateAction } from "react";
-import { Nested } from "../object-state/types/Nested";
-import { Flooded } from "./Flooded";
+import { FormEvent, SetStateAction } from 'react';
+import { Nested } from '../object-state/types/Nested';
+import { Flooded } from './Flooded';
 
 export type FormInterface<T> = {
     touched: Flooded<T, boolean>;

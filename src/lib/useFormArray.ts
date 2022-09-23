@@ -13,7 +13,7 @@ export default function useFormArray<FormInput extends Record<string, any>>(
     const _push = (arr: any, value: any) => {
         const newArr = [...arr, value];
         return newArr as any;
-    }
+    };
 
     const _remove = (arr: any, idx: number) => {
         arr.splice(idx, 1);
@@ -23,7 +23,7 @@ export default function useFormArray<FormInput extends Record<string, any>>(
     const _insert = (arr: any, idx: number, value: any) => {
         const newArr = [...arr.slice(0, idx), value, ...arr.slice(idx)];
         return newArr as any;
-    }
+    };
 
     const replace = useCallback((value: Extract<Nested<FormInput>, any[]>) => {
         setState(subname, value);
@@ -32,7 +32,7 @@ export default function useFormArray<FormInput extends Record<string, any>>(
 
     const push = useCallback((value: Nested<FormInput>) => {
         setState(subname, (oldArr: any) => _push(oldArr, value));
-        setTouched(subname, (oldArr: any) => _push(oldArr, flood(value, false)))
+        setTouched(subname, (oldArr: any) => _push(oldArr, flood(value, false)));
     }, [setState, setTouched]);
 
     const remove = useCallback((idx: number) => {

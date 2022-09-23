@@ -11,7 +11,7 @@ export function getSuperKeys(key: string): string[] {
     const superKeys = [];
     for (let i = 1; i < keySplit.length; i ++) {
         const superKey = keySplit.slice(0, i).join('.');
-        superKeys.push(superKey)
+        superKeys.push(superKey);
     }
     return superKeys;
 }

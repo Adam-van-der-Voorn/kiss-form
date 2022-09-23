@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef } from 'react';
 
 type Opts = {
     inline: boolean;
@@ -6,9 +6,9 @@ type Opts = {
 
 export default function useRenderCounter(name: string, opts?: Opts) {
     const count = useRef(0);
-    count.current ++
+    count.current ++;
     if (opts && opts.inline) {
-        return <span>render: <span className="render-count" id={name}>{count.current}</span></span>
+        return <span>render: <span className="render-count" id={name}>{count.current}</span></span>;
     }
-    return <div>Rendered <span className="render-count" id={name}>{count.current}</span> times</div>
+    return <div>Rendered <span className="render-count" id={name}>{count.current}</span> times</div>;
 }

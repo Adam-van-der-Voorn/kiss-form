@@ -8,7 +8,7 @@ import { Nested } from './object-state/types/Nested';
 export default function useForm<FormInput extends Record<string, any>>(initialData: FormInput, onSubmit: Submit<FormInput> /*, config, validation, */) {
     const [state, setState] = useNestedState(initialData);
     // has to be any internally to avoid 'type instantiation is excessively deep and possibly infinite'
-    const [touched, setTouched] = useNestedState<any>(flood(initialData, false))
+    const [touched, setTouched] = useNestedState<any>(flood(initialData, false));
 
     const register = useCallback((name: string) => {
         return {
@@ -16,8 +16,8 @@ export default function useForm<FormInput extends Record<string, any>>(initialDa
             onChange: (ev: FormEvent<HTMLInputElement>) => {
                 setState(name, ev.currentTarget.value as any);
             },
-            onBlur: (ev: FormEvent<HTMLInputElement>) => {
-                setTouched(name, true as any)
+            onBlur: () => {
+                setTouched(name, true as any);
             }
         };
     }, [setState, setTouched]);

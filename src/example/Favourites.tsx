@@ -1,11 +1,11 @@
-import React, { memo } from "react";
-import useFormArray from "../lib/useFormArray";
-import useFormPartition from "../lib/useFormPartition";
-import trimObject from "../lib/private/util/trimObject";
-import { FormInterface } from "../lib/types/useFormTypes";
-import { FormInput } from "./Form";
-import PokerHand from "./PokerHand";
-import useRenderCounter from "./util/useRenderCounter";
+import React, { memo } from 'react';
+import useFormArray from '../lib/useFormArray';
+import useFormPartition from '../lib/useFormPartition';
+import trimObject from '../lib/private/util/trimObject';
+import { FormInterface } from '../lib/types/useFormTypes';
+import { FormInput } from './Form';
+import PokerHand from './PokerHand';
+import useRenderCounter from './util/useRenderCounter';
 
 type Props = {
     form: FormInterface<FormInput>;
@@ -21,7 +21,7 @@ function Favourites({ form, favourites }: Props) {
         <div className="nested">
             <p>Your favourites are <span id="favourites-state">{JSON.stringify(trimObject(favourites))}</span>!</p>
             <div>
-                <input type="text" value={favourites.fruit}{...partition.register("fruit")} autoComplete="off" />
+                <input type="text" value={favourites.fruit}{...partition.register('fruit')} autoComplete="off" />
             </div>
             {favourites.pokerHands.map((hand, idx) => {
                 return <PokerHand key={idx}
@@ -29,7 +29,7 @@ function Favourites({ form, favourites }: Props) {
                     {...{ hand, idx, remove, insert }}
                 />;
             })}
-            <button type="button" data-cy="push-hand" onClick={() => push({a: "", b: ""})}>Add poker hand</button>
+            <button type="button" data-cy="push-hand" onClick={() => push({a: '', b: ''})}>Add poker hand</button>
             <button type="button" data-cy="clear-hands" onClick={() => replace([])}>Clear</button>
             {renderCount}
         </div>

@@ -1,6 +1,6 @@
-import getKeysFromObject from "../lib/private/util/getKeysFromObject";
+import getKeysFromObject from '../lib/private/util/getKeysFromObject';
 
-const val = ":)";
+const val = ':)';
 
 test('get shallow keys', () => {
     const obj = {

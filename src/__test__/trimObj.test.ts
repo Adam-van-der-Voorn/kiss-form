@@ -1,13 +1,10 @@
-import trimObject from "../lib/private/util/trimObject";
+import trimObject from '../lib/private/util/trimObject';
 
-const original = "original!";
-const mutated = "mutated!";
-
-const notEmpty = "NOT EMPTY";
+const notEmpty = 'NOT EMPTY';
 
 test('trim shallow', () => {
     const initial = {
-        a: "", b: "", c: notEmpty,
+        a: '', b: '', c: notEmpty,
     };
     const expected = { c: notEmpty };
     const trimmed = trimObject(initial);
@@ -16,10 +13,10 @@ test('trim shallow', () => {
 
 test('trim nested', () => {
     const initial = {
-        a: "",
+        a: '',
         b: {
             c: notEmpty,
-            d: ""
+            d: ''
         },
         e: notEmpty,
     };
@@ -35,10 +32,10 @@ test('trim nested', () => {
 
 test('trim nested object', () => {
     const initial = {
-        a: "",
+        a: '',
         b: {
-            c: "",
-            d: ""
+            c: '',
+            d: ''
         },
         e: notEmpty,
     };

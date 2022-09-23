@@ -1,4 +1,4 @@
-import { Nested } from "../types/Nested";
+import { Nested } from '../types/Nested';
 
 export default function getNestedValue<T>(data: T, key: string) {
     const keys = key.split('.');

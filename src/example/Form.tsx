@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from "react";
-import trimObject from "../lib/private/util/trimObject";
-import useForm from "../lib/useForm";
-import Emails from "./Emails";
-import Favourites from "./Favourites";
+import React, { useEffect, useState } from 'react';
+import trimObject from '../lib/private/util/trimObject';
+import useForm from '../lib/useForm';
+import Emails from './Emails';
+import Favourites from './Favourites';
 import './style.css';
-import useRenderCounter from "./util/useRenderCounter";
+import useRenderCounter from './util/useRenderCounter';
 
 const defaultInitialData = {
-    name: "",
-    age: "",
+    name: '',
+    age: '',
     email: {
-        personal: "",
-        work: ""
+        personal: '',
+        work: ''
     },
     fav: {
-        fruit: "",
+        fruit: '',
         pokerHands: [] as { a: string, b: string }[]
     }
 };
@@ -36,7 +36,7 @@ function Form({initialData}: Props) {
     }
 
     const onSubmit = (data: FormInput) => {
-        console.log("submit!", data);
+        console.log('submit!', data);
         setSubmittedData(trimObject(data));
     };
 
@@ -56,8 +56,8 @@ function Form({initialData}: Props) {
         <form onSubmit={handleSubmit}>
             {renderCount}
             <div>
-                <input type="text" value={formState.name} {...register("name")} autoComplete="off" />
-                <input type="number" value={formState.age} {...register("age")} />
+                <input type="text" value={formState.name} {...register('name')} autoComplete="off" />
+                <input type="number" value={formState.age} {...register('age')} />
             </div>
             <Emails form={form} email={formState.email} />
             <Favourites form={form} favourites={formState.fav} />

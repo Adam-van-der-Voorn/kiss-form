@@ -1,8 +1,8 @@
-import React, { memo } from "react";
-import { Nested } from "../lib/object-state/types/Nested";
-import { Register } from "../lib/types/useFormTypes";
-import { FormInput } from "./Form";
-import useRenderCounter from "./util/useRenderCounter";
+import React, { memo } from 'react';
+import { Nested } from '../lib/object-state/types/Nested';
+import { Register } from '../lib/types/useFormTypes';
+import { FormInput } from './Form';
+import useRenderCounter from './util/useRenderCounter';
 
 type Props = {
     hand: FormInput['fav']['pokerHands'][0],

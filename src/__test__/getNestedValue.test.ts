@@ -1,6 +1,6 @@
-import getNestedValue from "../lib/object-state/util/getNestedValue";
+import getNestedValue from '../lib/object-state/util/getNestedValue';
 
-const target = "target!";
+const target = 'target!';
 
 test('objects', () => {
     const obj = {
@@ -28,7 +28,7 @@ test('arrays & objects', () => {
 test('empty key', () => {
     const obj = {
         a: {
-            b: ""
+            b: ''
         }
     };
     expect(getNestedValue(obj, '')).toBe(undefined);
@@ -37,7 +37,7 @@ test('empty key', () => {
 test('incorrect key', () => {
     const obj = {
         a: {
-            b: ""
+            b: ''
         }
     };
     expect(getNestedValue(obj, 'a.not-a-key')).toBe(undefined);
