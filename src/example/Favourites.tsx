@@ -1,6 +1,5 @@
 import React, { memo } from 'react';
 import useFormArray from '../lib/useFormArray';
-import useFormPartition from '../lib/useFormPartition';
 import trimObject from '../lib/private/util/trimObject';
 import { FormInterface } from '../lib/types/useFormTypes';
 import { FormInput } from './Form';
@@ -8,13 +7,12 @@ import PokerHand from './PokerHand';
 import useRenderCounter from './util/useRenderCounter';
 
 type Props = {
-    form: FormInterface<FormInput>;
+    partition: FormInterface<FormInput>;
     favourites: FormInput['fav'];
 };
 
-function Favourites({ form, favourites }: Props) {
+function Favourites({ partition, favourites }: Props) {
     const renderCount = useRenderCounter('favs');
-    const partition = useFormPartition('fav', form);
     const { push, remove, replace, insert } = useFormArray<FormInput>('pokerHands', partition);
 
     return (

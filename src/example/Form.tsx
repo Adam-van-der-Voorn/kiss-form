@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import trimObject from '../lib/private/util/trimObject';
 import useForm from '../lib/useForm';
+import useFormPartition from '../lib/useFormPartition';
 import Emails from './Emails';
 import Favourites from './Favourites';
 import './style.css';
@@ -50,6 +51,10 @@ function Form({initialData}: Props) {
     });
 
     const { state: formState, handleSubmit, form } = useForm(initialData, onSubmit);
+    const emailsPartition = useFormPartition('email', form);
+    const favouritesPartition = useFormPartition('fav', form);
+
+
     const { register, touched } = form;
 
     return (
@@ -59,8 +64,8 @@ function Form({initialData}: Props) {
                 <input type="text" value={formState.name} {...register('name')} autoComplete="off" />
                 <input type="number" value={formState.age} {...register('age')} />
             </div>
-            <Emails form={form} email={formState.email} />
-            <Favourites form={form} favourites={formState.fav} />
+            <Emails partition={emailsPartition} email={formState.email} />
+            <Favourites partition={favouritesPartition} favourites={formState.fav} />
             <pre id="form-state">
                 {JSON.stringify(trimObject(formState), null, 2)}
             </pre>

@@ -1,25 +1,23 @@
 import React, { memo, useCallback } from 'react';
-import getFormPartition from '../lib/useFormPartition';
 import { FormInterface } from '../lib/types/useFormTypes';
 import { FormInput } from './Form';
 import useRenderCounter from './util/useRenderCounter';
 
 type Props = {
-    form: FormInterface<FormInput>;
+    partition: FormInterface<FormInput>;
     email: FormInput['email'];
 };
 
-function Emails({ form, email }: Props) {
+function Emails({ partition, email }: Props) {
     const renderCount = useRenderCounter('email');
-    const partition = getFormPartition('email', form);
-    const setParitionState = partition.setState;
+    const { setState: setEmailsState } = partition;
 
     const clear = useCallback(() => {
-        setParitionState('', {
+        setEmailsState('', {
             work: '',
             personal: ''
         });
-    }, [setParitionState]);
+    }, [setEmailsState]);
 
     return (
         <div className="nested">

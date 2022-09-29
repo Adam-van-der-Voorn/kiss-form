@@ -45,8 +45,7 @@ describe('only render memoised component when needed', () => {
             expect(newRenderCounts.favs).to.equal(newRenderCounts.favs);
         });
     });
-    // temp broken, requires api change
-    it.skip('email', () => {
+    it('email', () => {
         let renderCounts = {};
         cy.visit('/');
         getRenderCounts(['root', 'email'])
