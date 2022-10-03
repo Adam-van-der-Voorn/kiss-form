@@ -2,14 +2,17 @@ const path = require('path');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports = {
-    entry: path.join(__dirname, 'src', 'example', 'index.tsx'),
+    entry: {
+        "form1": path.join(__dirname, 'src', 'example', '1', 'index1.tsx'),
+        "form2": path.join(__dirname, 'src', 'example', '2', 'index2.tsx'),
+    },
     mode: 'development',
     devtool: 'eval-source-map',
     resolve: {
         extensions: ['.tsx', '.ts', '.js', '.jsx'],
     },
     output: {
-        filename: 'bundle.js',
+        filename: '[name].bundle.js',
         path: path.resolve(__dirname, 'dist'),
         publicPath: '/',
     },
@@ -38,12 +41,14 @@ module.exports = {
                     syntactic: true,
                 },
             },
-        })        
+        })
     ],
     devServer: {
         static: {
             directory: path.join(__dirname, 'dist'),
         },
-        compress: true,
+        historyApiFallback: {
+        index: 'form1/index.html'
+        }
     }
 };

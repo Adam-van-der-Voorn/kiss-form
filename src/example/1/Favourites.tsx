@@ -1,10 +1,10 @@
 import React, { memo } from 'react';
-import useFormArray from '../lib/useFormArray';
-import trimObject from '../lib/private/util/trimObject';
-import { FormInterface } from '../lib/types/useFormTypes';
-import { FormInput } from './Form';
+import useFormArray from '../../lib/useFormArray';
+import trimObject from '../../lib/private/util/trimObject';
+import { FormInterface } from '../../lib/types/useFormTypes';
+import { FormInput } from './Form1';
 import PokerHand from './PokerHand';
-import useRenderCounter from './util/useRenderCounter';
+import useRenderCounter from '../util/useRenderCounter';
 
 type Props = {
     partition: FormInterface<FormInput>;

@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import trimObject from '../lib/private/util/trimObject';
-import { Flooded } from '../lib/types/Flooded';
-import useForm from '../lib/useForm';
-import useFormPartition from '../lib/useFormPartition';
+import trimObject from '../../lib/private/util/trimObject';
+import { Flooded } from '../../lib/types/Flooded';
+import useForm from '../../lib/useForm';
+import useFormPartition from '../../lib/useFormPartition';
 import Emails from './Emails';
 import Favourites from './Favourites';
-import './style.css';
-import useRenderCounter from './util/useRenderCounter';
+import useRenderCounter from '../util/useRenderCounter';
 
 const defaultInitialData = {
     name: '',
@@ -27,7 +26,7 @@ type Props = {
     initialData?: FormInput;
 }
 
-function Form({initialData}: Props) {
+function Form1({initialData}: Props) {
 
     const [submittedData, setSubmittedData] = useState<any>(null);
 
@@ -91,4 +90,4 @@ function Form({initialData}: Props) {
     );
 }
 
-export default Form;
+export default Form1;
