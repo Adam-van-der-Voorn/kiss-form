@@ -7,3 +7,12 @@ div {
     padding: 5px;
     margin-bottom: 5px;
 }
+
+.err-msg {
+    color: red;
+    font-size: x-small;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 5px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}

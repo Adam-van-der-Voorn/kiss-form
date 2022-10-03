@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import trimObject from '../lib/private/util/trimObject';
+import { Flooded } from '../lib/types/Flooded';
 import useForm from '../lib/useForm';
 import useFormPartition from '../lib/useFormPartition';
 import Emails from './Emails';
@@ -41,6 +42,15 @@ function Form({initialData}: Props) {
         setSubmittedData(trimObject(data));
     };
 
+    const validation = (data: FormInput) => {
+        console.log('validating...');
+        const errors: Partial<Flooded<string, FormInput>> = {};
+        if (data.name == '') {
+            errors.name = 'name is required';
+        }
+        return errors;
+    };
+
     useEffect(() => {
         document.querySelectorAll('input').forEach(input => {
             const name = input.getAttribute('name');
@@ -50,7 +60,7 @@ function Form({initialData}: Props) {
         });
     });
 
-    const { state: formState, handleSubmit, form } = useForm(initialData, onSubmit);
+    const { state: formState, handleSubmit, error, form } = useForm(initialData, onSubmit, { validation });
     const emailsPartition = useFormPartition('email', form);
     const favouritesPartition = useFormPartition('fav', form);
 
@@ -62,6 +72,7 @@ function Form({initialData}: Props) {
             {renderCount}
             <div>
                 <input type="text" value={formState.name} {...register('name')} autoComplete="off" />
+                <div className='err-msg' data-cy="name-err">{error.name}</div>
                 <input type="number" value={formState.age} {...register('age')} />
             </div>
             <Emails partition={emailsPartition} email={formState.email} />

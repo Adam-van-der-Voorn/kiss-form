@@ -16,3 +16,5 @@ export type Register = (name: string) => {
     onChange: (ev: FormEvent<HTMLInputElement>) => void;
     onBlur: (ev: FormEvent<HTMLInputElement>) => void;
 };
+
+export type FormErrors<T> = Partial<Flooded<string, T>>

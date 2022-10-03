@@ -28,12 +28,15 @@ describe('basic', () => {
     });
     it('types and submits nested input', () => {
         const expected = {
+            name: 'I need to be here as this field is now required :)',
             email: {
                 work: '123',
                 personal: '456',
             }
         };
         cy.visit('/');
+        cy.get('input[name="name"]')
+            .type(expected.name);
         cy.get('input[name="email.work"]')
             .type(expected.email.work);
         cy.get('input[name="email.personal"]')

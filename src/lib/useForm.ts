@@ -1,14 +1,21 @@
-import { FormEvent, SetStateAction, useCallback, useMemo } from 'react';
-import { FormInterface, Submit } from './types/useFormTypes';
+import { FormEvent, SetStateAction, useCallback, useMemo, useState } from 'react';
+import { FormErrors, FormInterface, Submit } from './types/useFormTypes';
 import useNestedState from './object-state/useNestedState';
 import flood from './private/util/flood';
 import { Flooded } from './types/Flooded';
 import { Nested } from './object-state/types/Nested';
+import objIsEmpty from './private/util/objIsEmpty';
 
-export default function useForm<FormInput extends Record<string, any>>(initialData: FormInput, onSubmit: Submit<FormInput> /*, config, validation, */) {
+type Opts<T> = {
+    validation?: (input: T) => FormErrors<T>
+}
+
+export default function useForm<FormInput extends Record<string, any>>(initialData: FormInput, onSubmit: Submit<FormInput>, opts?: Opts<FormInput>) {
+    const validation = opts?.validation;
     const [state, setState] = useNestedState(initialData);
     // has to be any internally to avoid 'type instantiation is excessively deep and possibly infinite'
     const [touched, setTouched] = useNestedState<any>(flood(initialData, false));
+    const [error, setError] = useState<FormErrors<FormInput>>({});
 
     const register = useCallback((name: string) => {
         return {
@@ -24,6 +31,13 @@ export default function useForm<FormInput extends Record<string, any>>(initialDa
 
     const handleSubmit = (ev: FormEvent) => {
         ev.preventDefault();
+        if (validation) {
+            const validationResult = validation(state);
+            setError(validationResult);
+            if (!objIsEmpty(validationResult)) {
+                return;
+            }
+        }
         onSubmit(state);
     };
 
@@ -32,8 +46,8 @@ export default function useForm<FormInput extends Record<string, any>>(initialDa
         touched: touched as Flooded<FormInput, boolean>,
         setTouched: setTouched as (name: string, val: SetStateAction<Flooded<Nested<FormInput>, boolean>>) => void,
         setState,
-        register
+        register, 
     }), [setState, register, touched, setTouched]);
 
-    return { state, handleSubmit, form };
+    return { state, error, handleSubmit, form };
 }
