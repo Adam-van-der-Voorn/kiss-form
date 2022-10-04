@@ -43,7 +43,7 @@ function Form1({initialData}: Props) {
 
     const validation = (data: FormInput) => {
         console.log('validating...');
-        const errors: Partial<Flooded<string, FormInput>> = {};
+        const errors: Partial<Flooded<FormInput, string>> = {};
         if (data.name == '') {
             errors.name = 'name is required';
         }

@@ -1,6 +1,6 @@
 /// <reference types="Cypress" />
 
-describe('basic', () => {
+describe('basic 1', () => {
     it('types and submits', () => {
         const expected = {
             name: 'john doe',
@@ -54,6 +54,43 @@ describe('basic', () => {
             .click();
         cy.get('#form-state')
             .innerHTMLEqualsObj({});
+    });
+});
+
+describe('basic 2', () => {
+    it('types and submits', () => {
+        const expected = {
+            addr: '123 Fake street',
+            cart: {
+                couponNo: '875859097',
+                items: [
+                    { item: 'bread knife', quantity: '1' },
+                    { item: 'steak knife', quantity: '5' },
+                    { item: 'box grater', quantity: '2' }
+                ]
+            }
+        };
+        cy.visit('/form2');
+        cy.get('input[name=addr]')
+            .type(expected.addr);
+        cy.get('input[name="cart.couponNo"]')
+            .type(expected.cart.couponNo);
+
+        for (let i = 0; i < expected.cart.items.length; i++) {
+            cy.get('[data-cy="push-item"]')
+                .click();
+            cy.get(`input[name="cart.items.${i}.item"]`)
+                .clear()
+                .type(expected.cart.items[i].item);
+            cy.get(`input[name="cart.items.${i}.quantity"]`)
+                .clear()
+                .type(expected.cart.items[i].quantity);
+        }
+
+        cy.get('input[type=submit]')
+            .click();
+        cy.get('#submitted-data')
+            .innerHTMLEqualsObj(expected);
     });
 });
 
