@@ -1,5 +1,5 @@
 import { FormEvent, SetStateAction, useCallback, useMemo, useState } from 'react';
-import { FormErrors, FormInterface, Submit } from './types/useFormTypes';
+import { FormErrors, FormCapsule, Submit } from './types/useFormTypes';
 import useNestedState from './object-state/useNestedState';
 import flood from './private/util/flood';
 import { Flooded } from './types/Flooded';
@@ -7,8 +7,8 @@ import { Nested } from './object-state/types/Nested';
 import objIsEmpty from './private/util/objIsEmpty';
 
 type Opts<T> = {
-    validation?: (input: T) => FormErrors<T>
-}
+    validation?: (input: T) => FormErrors<T>;
+};
 
 export default function useForm<FormInput extends Record<string, any>>(initialData: FormInput, onSubmit: Submit<FormInput>, opts?: Opts<FormInput>) {
     const validation = opts?.validation;
@@ -41,13 +41,12 @@ export default function useForm<FormInput extends Record<string, any>>(initialDa
         onSubmit(state);
     };
 
-    
-    const form: FormInterface<FormInput> = useMemo(() => ({
-        touched: touched as Flooded<FormInput, boolean>,
-        setTouched: setTouched as (name: string, val: SetStateAction<Flooded<Nested<FormInput>, boolean>>) => void,
-        setState,
-        register, 
+    const formCapsule: FormCapsule<FormInput> = useMemo(() => ({
+        _touched: touched as Flooded<FormInput, boolean>,
+        _setTouched: setTouched as (name: string, val: SetStateAction<Flooded<Nested<FormInput>, boolean>>) => void,
+        _setState: setState,
+        _register: register,
     }), [setState, register, touched, setTouched]);
 
-    return { state, error, handleSubmit, form };
+    return { touched, error, state, setState, register, handleSubmit, formCapsule };
 }

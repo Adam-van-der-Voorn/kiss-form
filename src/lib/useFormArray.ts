@@ -1,14 +1,17 @@
 import { useCallback } from 'react';
 import { Nested } from './object-state/types/Nested';
-import { FormInterface } from './types/useFormTypes';
+import { FormCapsule } from './types/useFormTypes';
 import flood from './private/util/flood';
 
 export default function useFormArray<FormInput extends Record<string, any>>(
     subname: string,
-    formInterface: FormInterface<FormInput>
+    formInterface: FormCapsule<FormInput>
 ) {
 
-    const { setState, setTouched } = formInterface;
+    const {
+        _setState: setState,
+        _setTouched: setTouched
+    } = formInterface;
 
     const _push = (arr: any, value: any) => {
         const newArr = [...arr, value];

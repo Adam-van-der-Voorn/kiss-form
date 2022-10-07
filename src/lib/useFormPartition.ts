@@ -2,10 +2,15 @@ import { SetStateAction, useCallback, useMemo } from 'react';
 import { Nested } from './object-state/types/Nested';
 import getNestedValue from './object-state/util/getNestedValue';
 import { Flooded } from './types/Flooded';
-import { FormInterface } from './types/useFormTypes';
+import { FormCapsule } from './types/useFormTypes';
 
-export default function useFormPartition<K extends Record<string, any>>(name: string, form: FormInterface<K>) {
-    const { setState, register, touched, setTouched } = form;
+export default function useFormPartition<K extends Record<string, any>>(name: string, formCapsule: FormCapsule<K>) {
+    const {
+        _setState: setState,
+        _register: register,
+        _touched: touched,
+        _setTouched: setTouched
+    } = formCapsule;
 
     const _getFullName = useCallback((subname: string) => {
         return subname.length > 1
@@ -33,12 +38,19 @@ export default function useFormPartition<K extends Record<string, any>>(name: st
         return register(fullName);
     }, [register, _getFullName]);
 
-    const partition: FormInterface<K> = useMemo(() => ({
+    const partitionCapsule: FormCapsule<K> = useMemo(() => ({
+        _setState: setPartitionState,
+        _register: registerPartition,
+        _touched: partitionTouched,
+        _setTouched: setPartitionTouched
+    }), [setPartitionState, registerPartition, partitionTouched, setPartitionTouched]);
+
+    return useMemo(() => ({
+        touched: partitionTouched,
+        /* error???,
+        state???, */
         setState: setPartitionState,
         register: registerPartition,
-        touched: partitionTouched,
-        setTouched: setPartitionTouched
-    }), [ setPartitionState, registerPartition, partitionTouched, setPartitionTouched ]);
-
-    return partition;
+        partitionCapsule
+    }), [partitionCapsule, partitionTouched, registerPartition, setPartitionState]);
 }

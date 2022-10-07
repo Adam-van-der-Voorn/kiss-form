@@ -1,10 +1,10 @@
 import React, { memo, useCallback } from 'react';
-import { FormInterface } from '../../lib/types/useFormTypes';
+import { FormPartition } from '../../lib/types/useFormTypes';
 import { FormInput } from './Form1';
 import useRenderCounter from '../util/useRenderCounter';
 
 type Props = {
-    partition: FormInterface<FormInput>;
+    partition: FormPartition<FormInput>;
     email: FormInput['email'];
 };
 

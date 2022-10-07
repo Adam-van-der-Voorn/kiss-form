@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Nested } from '../../lib/object-state/types/Nested';
 import trimObject from '../../lib/private/util/trimObject';
 import { Flooded } from '../../lib/types/Flooded';
-import { FormInterface, Register } from '../../lib/types/useFormTypes';
+import { FormCapsule, Register } from '../../lib/types/useFormTypes';
 import useForm from '../../lib/useForm';
 import useNameForPlaceholder from '../util/useNameForPlaceholder';
 import ShoppingCart from './ShoppingCart';
@@ -22,7 +22,7 @@ type FormContextType = {
     setState: (name: string, val: React.SetStateAction<Nested<FormInput>>) => void,
     register: Register,
     touched: Flooded<FormInput, boolean>,
-    form: FormInterface<FormInput>;
+    formCapsule: FormCapsule<FormInput>;
 };
 
 export const FormContext = React.createContext<FormContextType>({} as any);
@@ -47,11 +47,11 @@ function Form1({ initialData }: Props) {
 
     useNameForPlaceholder();
 
-    const { state, handleSubmit, form: { register, touched, setState }, form } = useForm(initialData, onSubmit);
-    const formStuff = { state, setState, register, touched, form };
+    const { state, handleSubmit, register, touched, setState, formCapsule } = useForm(initialData, onSubmit);
+    const formAPI = { state, setState, register, touched, formCapsule };
 
     return (
-        <FormContext.Provider value={formStuff}>
+        <FormContext.Provider value={formAPI}>
             <form onSubmit={handleSubmit}>
                 <div>
                     <input type="text" value={state.addr} {...register('addr')} autoComplete="off" />

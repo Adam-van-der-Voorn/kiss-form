@@ -6,6 +6,7 @@ import useFormPartition from '../../lib/useFormPartition';
 import Emails from './Emails';
 import Favourites from './Favourites';
 import useRenderCounter from '../util/useRenderCounter';
+import useNameForPlaceholder from '../util/useNameForPlaceholder';
 
 const defaultInitialData = {
     name: '',
@@ -50,34 +51,24 @@ function Form1({initialData}: Props) {
         return errors;
     };
 
-    useEffect(() => {
-        document.querySelectorAll('input').forEach(input => {
-            const name = input.getAttribute('name');
-            if (name) {
-                input.setAttribute('placeholder', name);
-            }
-        });
-    });
+    useNameForPlaceholder();
 
-    const { state: formState, handleSubmit, error, form } = useForm(initialData, onSubmit, { validation });
-    const emailsPartition = useFormPartition('email', form);
-    const favouritesPartition = useFormPartition('fav', form);
-
-
-    const { register, touched } = form;
+    const { state, touched, error, register, handleSubmit, formCapsule } = useForm(initialData, onSubmit, { validation });
+    const emailsPartition = useFormPartition('email', formCapsule);
+    const favouritesPartition = useFormPartition('fav', formCapsule);
 
     return (
         <form onSubmit={handleSubmit}>
             {renderCount}
             <div>
-                <input type="text" value={formState.name} {...register('name')} autoComplete="off" />
+                <input type="text" value={state.name} {...register('name')} autoComplete="off" />
                 <div className='err-msg' data-cy="name-err">{error.name}</div>
-                <input type="number" value={formState.age} {...register('age')} />
+                <input type="number" value={state.age} {...register('age')} />
             </div>
-            <Emails partition={emailsPartition} email={formState.email} />
-            <Favourites partition={favouritesPartition} favourites={formState.fav} />
+            <Emails partition={emailsPartition} email={state.email} />
+            <Favourites partition={favouritesPartition} favourites={state.fav} />
             <pre id="form-state">
-                {JSON.stringify(trimObject(formState), null, 2)}
+                {JSON.stringify(trimObject(state), null, 2)}
             </pre>
             <input type="submit" />
             <pre id="form-touched">

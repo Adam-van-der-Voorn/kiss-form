@@ -4,8 +4,8 @@ import { FormContext, FormInput } from './Form2';
 import ShoppingItem from './ShoppingItem';
 
 function Favourites() {
-    const { state: { cart }, register, form } = useContext(FormContext);
-    const { push, remove, replace, insert } = useFormArray<FormInput>('cart.items', form);
+    const { state: { cart }, register, formCapsule } = useContext(FormContext);
+    const { push, replace } = useFormArray<FormInput>('cart.items', formCapsule);
 
     return (
         <div className="nested">
