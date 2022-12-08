@@ -8,5 +8,6 @@ export default defineConfig({
     baseUrl: 'http://localhost:8080'
   },
   screenshotOnRunFailure: false,
-  video: false
+  video: false,
+  modifyObstructiveCode: false
 });
