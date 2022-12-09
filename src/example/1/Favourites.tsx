@@ -7,14 +7,13 @@ import PokerHand from './PokerHand';
 import useRenderCounter from '../util/useRenderCounter';
 
 type Props = {
-    partition: FormPartition<FormInput>;
-    favourites: FormInput['fav'];
+    partition: FormPartition<FormInput['fav']>;
 };
 
-function Favourites({ partition, favourites }: Props) {
+function Favourites({ partition }: Props) {
     const renderCount = useRenderCounter('favs');
-    const { register, partitionCapsule} = partition;
-    const { push, remove, replace, insert } = useFormArray<FormInput>('pokerHands', partitionCapsule);
+    const { register, state: favourites, partitionCapsule} = partition;
+    const { push, remove, replace, insert } = useFormArray<FormInput['fav'], FormInput['fav']['pokerHands']>('pokerHands', partitionCapsule);
 
     return (
         <div className="nested">

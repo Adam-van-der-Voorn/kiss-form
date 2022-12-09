@@ -44,9 +44,10 @@ export default function useForm<FormInput extends Record<string, any>>(initialDa
     const formCapsule: FormCapsule<FormInput> = useMemo(() => ({
         _touched: touched as Flooded<FormInput, boolean>,
         _setTouched: setTouched as (name: string, val: SetStateAction<Flooded<Nested<FormInput>, boolean>>) => void,
+        _state: state,
         _setState: setState,
         _register: register,
-    }), [setState, register, touched, setTouched]);
+    }), [state, setState, register, touched, setTouched]);
 
     return { touched, error, state, setState, register, handleSubmit, formCapsule };
 }

@@ -4,6 +4,7 @@ import { Flooded } from './Flooded';
 
 export type FormCapsule<T> = {
     _touched: Flooded<T, boolean>;
+    _state: T,
     _setTouched: (name: string, val: SetStateAction<Flooded<Nested<T>, boolean>>) => void,
     _setState: (name: string, val: SetStateAction<Nested<T>>) => void,
     _register: Register;
@@ -11,6 +12,7 @@ export type FormCapsule<T> = {
 
 export type FormPartition<T> = {
     touched: Flooded<T, boolean>,
+    state: T,
     setState: (name: string, val: SetStateAction<Nested<T>>) => void,
     register: Register,
     partitionCapsule: FormCapsule<T>

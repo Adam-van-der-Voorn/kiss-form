@@ -31,7 +31,7 @@ test('empty key', () => {
             b: ''
         }
     };
-    expect(getNestedValue(obj, '')).toBe(undefined);
+    expect(() => getNestedValue(obj, '')).toThrow(/Precondition failed/);
 });
 
 test('incorrect key', () => {

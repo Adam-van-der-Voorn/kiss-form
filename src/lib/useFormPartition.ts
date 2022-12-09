@@ -2,13 +2,14 @@ import { SetStateAction, useCallback, useMemo } from 'react';
 import { Nested } from './object-state/types/Nested';
 import getNestedValue from './object-state/util/getNestedValue';
 import { Flooded } from './types/Flooded';
-import { FormCapsule } from './types/useFormTypes';
+import { FormCapsule, FormPartition } from './types/useFormTypes';
 
-export default function useFormPartition<K extends Record<string, any>>(name: string, formCapsule: FormCapsule<K>) {
+export default function useFormPartition<Base extends Record<string, unknown>, Sub extends Nested<Base>>(name: string, formCapsule: FormCapsule<Base>): FormPartition<Sub> {
     const {
         _setState: setState,
         _register: register,
         _touched: touched,
+        _state: state,
         _setTouched: setTouched
     } = formCapsule;
 
@@ -19,18 +20,21 @@ export default function useFormPartition<K extends Record<string, any>>(name: st
     }, [name]);
 
     const partitionTouched = useMemo(() => {
-        const fullName = _getFullName(name);
-        return getNestedValue(touched, fullName) as Flooded<K, boolean>;
-    }, [name, _getFullName, touched]);
+        return getNestedValue(touched, name) as Flooded<Sub, boolean>;
+    }, [name, touched]);
 
-    const setPartitionTouched = useCallback((subname: string, val: SetStateAction<Flooded<Nested<K>, boolean>>) => {
+    const setPartitionTouched = useCallback((subname: string, val: SetStateAction<Flooded<Nested<Sub>, boolean>>) => {
         const fullName = _getFullName(subname);
-        setTouched(fullName, val);
+        setTouched(fullName, val as any);
     }, [setTouched, _getFullName]);
 
-    const setPartitionState = useCallback((subname: string, val: SetStateAction<Nested<K>>) => {
+    const partitionState = useMemo(() => {
+        return getNestedValue(state, name) as Sub;
+    }, [name, state]);
+
+    const setPartitionState = useCallback((subname: string, val: SetStateAction<Nested<Sub>>) => {
         const fullName = _getFullName(subname);
-        setState(fullName, val);
+        setState(fullName, val as any);
     }, [setState, _getFullName]);
 
     const registerPartition = useCallback((subname: string) => {
@@ -38,19 +42,20 @@ export default function useFormPartition<K extends Record<string, any>>(name: st
         return register(fullName);
     }, [register, _getFullName]);
 
-    const partitionCapsule: FormCapsule<K> = useMemo(() => ({
+    const partitionCapsule: FormCapsule<Sub> = useMemo(() => ({
+        _state: partitionState,
         _setState: setPartitionState,
         _register: registerPartition,
         _touched: partitionTouched,
         _setTouched: setPartitionTouched
-    }), [setPartitionState, registerPartition, partitionTouched, setPartitionTouched]);
+    }), [partitionState, setPartitionState, registerPartition, partitionTouched, setPartitionTouched]);
 
     return useMemo(() => ({
         touched: partitionTouched,
-        /* error???,
-        state???, */
+        /* error???,*/
+        state: partitionState, 
         setState: setPartitionState,
         register: registerPartition,
         partitionCapsule
-    }), [partitionCapsule, partitionTouched, registerPartition, setPartitionState]);
+    }), [partitionCapsule, partitionState, partitionTouched, registerPartition, setPartitionState]);
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import trimObject from '../../lib/private/util/trimObject';
 import { Flooded } from '../../lib/types/Flooded';
 import useForm from '../../lib/useForm';
@@ -54,8 +54,8 @@ function Form1({initialData}: Props) {
     useNameForPlaceholder();
 
     const { state, touched, error, register, handleSubmit, formCapsule } = useForm(initialData, onSubmit, { validation });
-    const emailsPartition = useFormPartition('email', formCapsule);
-    const favouritesPartition = useFormPartition('fav', formCapsule);
+    const emailsPartition = useFormPartition<FormInput, FormInput['email']>('email', formCapsule);
+    const favouritesPartition = useFormPartition<FormInput, FormInput['fav']>('fav', formCapsule);
 
     return (
         <form onSubmit={handleSubmit}>
@@ -65,8 +65,8 @@ function Form1({initialData}: Props) {
                 <div className='err-msg' data-cy="name-err">{error.name}</div>
                 <input type="number" value={state.age} {...register('age')} />
             </div>
-            <Emails partition={emailsPartition} email={state.email} />
-            <Favourites partition={favouritesPartition} favourites={state.fav} />
+            <Emails partition={emailsPartition} />
+            <Favourites partition={favouritesPartition} />
             <pre id="form-state">
                 {JSON.stringify(trimObject(state), null, 2)}
             </pre>

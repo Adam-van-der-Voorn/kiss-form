@@ -3,15 +3,15 @@ import { Nested } from './object-state/types/Nested';
 import { FormCapsule } from './types/useFormTypes';
 import flood from './private/util/flood';
 
-export default function useFormArray<FormInput extends Record<string, any>>(
+export default function useFormArray<Base extends Record<string, unknown>, Sub extends Extract<Nested<Base>, unknown[]>>(
     subname: string,
-    formInterface: FormCapsule<FormInput>
+    formCapsule: FormCapsule<Base>
 ) {
 
     const {
         _setState: setState,
         _setTouched: setTouched
-    } = formInterface;
+    } = formCapsule;
 
     const _push = (arr: any, value: any) => {
         const newArr = [...arr, value];
@@ -28,12 +28,12 @@ export default function useFormArray<FormInput extends Record<string, any>>(
         return newArr as any;
     };
 
-    const replace = useCallback((value: Extract<Nested<FormInput>, any[]>) => {
+    const replace = useCallback((value: Sub) => {
         setState(subname, value);
         setTouched(subname, flood(value, false));
     }, [subname, setState, setTouched]);
 
-    const push = useCallback((value: Nested<FormInput>) => {
+    const push = useCallback((value: Sub[0]) => {
         setState(subname, (oldArr: any) => _push(oldArr, value));
         setTouched(subname, (oldArr: any) => _push(oldArr, flood(value, false)));
     }, [subname, setState, setTouched]);
@@ -43,7 +43,7 @@ export default function useFormArray<FormInput extends Record<string, any>>(
         setTouched(subname, (oldArr: any) => _remove(oldArr, idx));
     }, [subname, setState, setTouched]);
 
-    const insert = useCallback((idx: number, value: Nested<FormInput>) => {
+    const insert = useCallback((idx: number, value: Sub[0]) => {
         setState(subname, (oldArr: any) => _insert(oldArr, idx, value));
         setTouched(subname, (oldArr: any) => _insert(oldArr, idx, flood(value, false)));
     }, [subname, setState, setTouched]);

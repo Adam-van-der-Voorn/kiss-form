@@ -1,5 +1,4 @@
 import React, { memo } from 'react';
-import { Nested } from '../../lib/object-state/types/Nested';
 import { Register } from '../../lib/types/useFormTypes';
 import { FormInput } from './Form1';
 import useRenderCounter from '../util/useRenderCounter';
@@ -9,7 +8,7 @@ type Props = {
     register: Register;
     idx: number;
     remove: (idx: number) => void;
-    insert: (idx: number, val: Nested<FormInput>) => void;
+    insert: (idx: number, val: FormInput['fav']['pokerHands'][0]) => void;
 };
 
 function PokerHand({ hand, register, idx, remove, insert }: Props) {

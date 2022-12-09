@@ -55,6 +55,9 @@ describe('only render memoised component when needed', () => {
 
         cy.get('input[name="email.work"]')
             .type('a@v');
+        
+        cy.get('body').click('bottomRight', { force: true }); // unfocus email input
+
         getRenderCounts(['root', 'email']).then(newRenderCounts => {
             expect(newRenderCounts.root).to.be.greaterThan(renderCounts.root);
             expect(newRenderCounts.email).to.be.greaterThan(renderCounts.email);

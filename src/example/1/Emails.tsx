@@ -4,20 +4,19 @@ import { FormInput } from './Form1';
 import useRenderCounter from '../util/useRenderCounter';
 
 type Props = {
-    partition: FormPartition<FormInput>;
-    email: FormInput['email'];
+    partition: FormPartition<FormInput['email']>;
 };
 
-function Emails({ partition, email }: Props) {
+function Emails({ partition }: Props) {
     const renderCount = useRenderCounter('email');
-    const { setState: setEmailsState } = partition;
+    const { state: email, setState: setEmail } = partition;
 
     const clear = useCallback(() => {
-        setEmailsState('', {
+        setEmail('', {
             work: '',
             personal: ''
         });
-    }, [setEmailsState]);
+    }, [setEmail]);
 
     return (
         <div className="nested">
