@@ -11,8 +11,8 @@ type Props = {
 function ShoppingItem({ idx, item, quantity, register }: Props) {
     return (
         <div>
-            <input type="text" value={item} {...register(`cart.items.${idx}.item`)} />
-            <input type="number" value={quantity} {...register(`cart.items.${idx}.quantity`)} />
+            <input type="text" {...register(`cart.items.${idx}.item`)} />
+            <input type="number" {...register(`cart.items.${idx}.quantity`)} />
         </div>
     );
 }

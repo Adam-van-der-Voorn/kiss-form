@@ -1,10 +1,11 @@
 import { FormEvent, SetStateAction, useCallback, useMemo, useState } from 'react';
-import { FormErrors, FormCapsule, Submit } from './types/useFormTypes';
+import { FormErrors, FormCapsule, Submit, Register } from './types/useFormTypes';
 import useNestedState from './object-state/useNestedState';
 import flood from './private/util/flood';
 import { Flooded } from './types/Flooded';
 import { Nested } from './object-state/types/Nested';
 import objIsEmpty from './private/util/objIsEmpty';
+import getNestedValue from './object-state/util/getNestedValue';
 
 type Opts<T> = {
     validation?: (input: T) => FormErrors<T>;
@@ -17,9 +18,11 @@ export default function useForm<FormInput extends Record<string, any>>(initialDa
     const [touched, setTouched] = useNestedState<any>(flood(initialData, false));
     const [error, setError] = useState<FormErrors<FormInput>>({});
 
-    const register = useCallback((name: string) => {
+    const register: Register = useCallback((name: string) => {
+        const value = getNestedValue(state, name);
         return {
-            name: name,
+            name,
+            value,
             onChange: (ev: FormEvent<HTMLInputElement>) => {
                 setState(name, ev.currentTarget.value as any);
             },
@@ -27,7 +30,7 @@ export default function useForm<FormInput extends Record<string, any>>(initialDa
                 setTouched(name, true as any);
             }
         };
-    }, [setState, setTouched]);
+    }, [setState, setTouched, state]);
 
     const handleSubmit = (ev: FormEvent) => {
         ev.preventDefault();
@@ -47,6 +50,7 @@ export default function useForm<FormInput extends Record<string, any>>(initialDa
         _state: state,
         _setState: setState,
         _register: register,
+        _name: ''
     }), [state, setState, register, touched, setTouched]);
 
     return { touched, error, state, setState, register, handleSubmit, formCapsule };

@@ -54,7 +54,7 @@ function Form1({ initialData }: Props) {
         <FormContext.Provider value={formAPI}>
             <form onSubmit={handleSubmit}>
                 <div>
-                    <input type="text" value={state.addr} {...register('addr')} autoComplete="off" />
+                    <input type="text" {...register('addr')} autoComplete="off" />
                 </div>
                 <ShoppingCart />
                 <pre id="form-state">

@@ -22,7 +22,7 @@ describe('memo', () => {
 });
 
 describe('only render memoised component when needed', () => {
-    it('favs', () => {
+    it('asserts a sub-partition is not rendered when the parent is changed', () => {
         let renderCounts = {};
 
         cy.visit('/');
@@ -32,6 +32,9 @@ describe('only render memoised component when needed', () => {
 
         cy.get('input[name="fav.fruit"]')
             .type('apple');
+
+        cy.get('body').click('bottomRight', { force: true }); // unfocus fav fruit input
+
         getRenderCounts(['root', 'favs']).then(newRenderCounts => {
             expect(newRenderCounts.root).to.be.greaterThan(renderCounts.root);
             expect(newRenderCounts.favs).to.be.greaterThan(renderCounts.favs);
@@ -42,13 +45,13 @@ describe('only render memoised component when needed', () => {
             .type('someone');
         getRenderCounts(['root', 'favs']).then(newRenderCounts => {
             expect(newRenderCounts.root).to.be.greaterThan(renderCounts.root);
-            expect(newRenderCounts.favs).to.equal(newRenderCounts.favs);
+            expect(newRenderCounts.favs).to.equal(renderCounts.favs);
         });
     });
-    it('email', () => {
+    it('asserts a partition is not rendered when its sibling is changed', () => {
         let renderCounts = {};
         cy.visit('/');
-        getRenderCounts(['root', 'email'])
+        getRenderCounts(['favs', 'email'])
             .then(counts => {
                 renderCounts = counts;
             });
@@ -58,20 +61,41 @@ describe('only render memoised component when needed', () => {
         
         cy.get('body').click('bottomRight', { force: true }); // unfocus email input
 
-        getRenderCounts(['root', 'email']).then(newRenderCounts => {
-            expect(newRenderCounts.root).to.be.greaterThan(renderCounts.root);
+        getRenderCounts(['favs', 'email']).then(newRenderCounts => {
+            expect(newRenderCounts.favs).to.equal(renderCounts.favs);
             expect(newRenderCounts.email).to.be.greaterThan(renderCounts.email);
             renderCounts = newRenderCounts;
         });
 
-        cy.get('input[name=name]')
-            .type('someone');
-        getRenderCounts(['root', 'email']).then(newRenderCounts => {
-            expect(newRenderCounts.root).to.be.greaterThan(renderCounts.root);
+        cy.get('input[name="fav.fruit"]')
+            .type('apple');
+        getRenderCounts(['favs', 'email']).then(newRenderCounts => {
+            expect(newRenderCounts.favs).to.be.greaterThan(renderCounts.favs);
             expect(newRenderCounts.email).to.equal(renderCounts.email);
         });
     });
-    it('edit array field', () => {
+
+    it('asserts a partition is not rendered when its sibling is changed programatically', () => {
+        let renderCounts = {};
+        cy.visit('/');
+        getRenderCounts(['favs', 'email'])
+            .then(counts => {
+                renderCounts = counts;
+            });
+
+        cy.get('input[name="email.personal"]')
+            .type('personal@email.com');
+        cy.get('[data-cy=clear-email]').click(); 
+
+        getRenderCounts(['favs', 'email']).then(newRenderCounts => {
+            expect(newRenderCounts.favs).to.equal(renderCounts.favs);
+            expect(newRenderCounts.email).to.be.greaterThan(renderCounts.email);
+            renderCounts = newRenderCounts;
+        });
+    });
+
+    // scope has been dropped for partitoning array objects. New test will be devised
+    it.skip('edit array field', () => {
         let renderCounts = {};
         cy.visit('/');
         cy.get('[data-cy=push-hand]')

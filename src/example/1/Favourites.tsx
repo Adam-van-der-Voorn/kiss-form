@@ -19,7 +19,7 @@ function Favourites({ partition }: Props) {
         <div className="nested">
             <p>Your favourites are <span id="favourites-state">{JSON.stringify(trimObject(favourites))}</span>!</p>
             <div>
-                <input type="text" value={favourites.fruit}{...register('fruit')} autoComplete="off" />
+                <input type="text" {...register('fruit')} autoComplete="off" />
             </div>
             {favourites.pokerHands.map((hand, idx) => {
                 return <PokerHand key={idx}

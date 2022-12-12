@@ -7,7 +7,7 @@ export type FormCapsule<T> = {
     _state: T,
     _setTouched: (name: string, val: SetStateAction<Flooded<Nested<T>, boolean>>) => void,
     _setState: (name: string, val: SetStateAction<Nested<T>>) => void,
-    _register: Register;
+    _name: string;
 };
 
 export type FormPartition<T> = {

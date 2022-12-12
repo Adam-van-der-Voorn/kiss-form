@@ -9,7 +9,7 @@ type Props = {
 
 function Emails({ partition }: Props) {
     const renderCount = useRenderCounter('email');
-    const { state: email, setState: setEmail } = partition;
+    const { setState: setEmail } = partition;
 
     const clear = useCallback(() => {
         setEmail('', {
@@ -20,8 +20,8 @@ function Emails({ partition }: Props) {
 
     return (
         <div className="nested">
-            <input type="text" value={email.work} {...partition.register('work')} autoComplete="off" />
-            <input type="text" value={email.personal} {...partition.register('personal')} autoComplete="off" />
+            <input type="text" {...partition.register('work')} autoComplete="off" />
+            <input type="text" {...partition.register('personal')} autoComplete="off" />
             <button type="button" data-cy="clear-email" onClick={clear}>Clear</button>
             {renderCount}
         </div>

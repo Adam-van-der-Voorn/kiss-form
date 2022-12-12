@@ -51,15 +51,15 @@
     ],
     "rules": {
         "indent": [
-            "error",
+            "warn",
             4
         ],
         "quotes": [
-            "error",
+            "warn",
             "single"
         ],
         "semi": [
-            "error",
+            "warn",
             "always"
         ],
         "cypress/no-assigning-return-values": "error",

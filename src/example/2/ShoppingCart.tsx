@@ -10,7 +10,7 @@ function Favourites() {
     return (
         <div className="nested">
             <div>
-                <input type="number" value={cart.couponNo} {...register('cart.couponNo')} />
+                <input type="number" {...register('cart.couponNo')} />
             </div>
             {cart.items.map(({ item, quantity }, idx) => (
                 <ShoppingItem key={idx}

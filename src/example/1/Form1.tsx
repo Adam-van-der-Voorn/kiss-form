@@ -61,9 +61,9 @@ function Form1({initialData}: Props) {
         <form onSubmit={handleSubmit}>
             {renderCount}
             <div>
-                <input type="text" value={state.name} {...register('name')} autoComplete="off" />
+                <input type="text" {...register('name')} autoComplete="off" />
                 <div className='err-msg' data-cy="name-err">{error.name}</div>
-                <input type="number" value={state.age} {...register('age')} />
+                <input type="number" {...register('age')} />
             </div>
             <Emails partition={emailsPartition} />
             <Favourites partition={favouritesPartition} />

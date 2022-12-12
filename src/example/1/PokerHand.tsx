@@ -15,8 +15,8 @@ function PokerHand({ hand, register, idx, remove, insert }: Props) {
     const renderCount = useRenderCounter(`poker-hand-${idx}`, { inline: true });
     return (
         <div>
-            <input type="text" value={hand.a} {...register(`pokerHands.${idx}.a`)} />
-            <input type="text" value={hand.b} {...register(`pokerHands.${idx}.b`)} />
+            <input type="text" {...register(`pokerHands.${idx}.a`)} />
+            <input type="text" {...register(`pokerHands.${idx}.b`)} />
             <button type="button" data-cy={`remove-hand-${idx}`} onClick={() => remove(idx)}>Remove</button>
             <button type="button" data-cy={`insert-above-hand-${idx}`} onClick={() => insert(idx, {a: '', b: ''})}>Insert above</button>
             {renderCount}
