@@ -3,11 +3,11 @@ import { Nested } from '../object-state/types/Nested';
 import { Flooded } from './Flooded';
 
 export type FormCapsule<T> = {
-    _touched: Flooded<T, boolean>;
-    _state: T,
-    _setTouched: (name: string, val: SetStateAction<Flooded<Nested<T>, boolean>>) => void,
-    _setState: (name: string, val: SetStateAction<Nested<T>>) => void,
     _name: string;
+    _state: T,
+    _touched: Flooded<T, boolean>;
+    setStateRoot: (name: string, val: SetStateAction<any>) => void,
+    setTouchedRoot: (name: string, val: SetStateAction<Flooded<any, boolean>>) => void,
 };
 
 export type FormPartition<T> = {

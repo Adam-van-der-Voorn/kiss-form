@@ -7,11 +7,11 @@ import concatName from './private/util/concatName';
 
 export default function useFormPartition<Base extends Record<string, unknown>, Sub extends Nested<Base>>(relativeName: string, formCapsule: FormCapsule<Base>): FormPartition<Sub> {
     const {
-        _setState,
-        _touched,
+        _name: baseName,
         _state,
-        _setTouched,
-        _name: baseName
+        _touched,
+        setStateRoot,
+        setTouchedRoot,
     } = formCapsule;
 
     const absoluteName = useMemo(() => {
@@ -19,38 +19,32 @@ export default function useFormPartition<Base extends Record<string, unknown>, S
     }, [baseName, relativeName]);
 
     const touched = getNestedValue(_touched, relativeName) as Flooded<Sub, boolean>;
-
-    const setTouched = useCallback((subname: string, val: SetStateAction<Flooded<Nested<Sub>, boolean>>) => {
-        const name = concatName(relativeName, subname);
-        _setTouched(name, val as any);
-    }, [relativeName, _setTouched]);
-
     const state = getNestedValue(_state, relativeName) as Sub;
 
     const setState = useCallback((subname: string, val: SetStateAction<Nested<Sub>>) => {
-        const name = concatName(relativeName, subname);
-        _setState(name, val as any);
-    }, [relativeName, _setState]);
+        const name = concatName(absoluteName, subname);
+        setStateRoot(name, val as any);
+    }, [absoluteName, setStateRoot]);
 
     const registerPartition: Register = useCallback((subname: string) => {
         const name = concatName(absoluteName, subname);
         const value = getNestedValue(state, subname);
         const onChange = (ev: FormEvent<HTMLInputElement>) => {
-            _setState(name, ev.currentTarget.value as any);
+            setStateRoot(name, ev.currentTarget.value as any);
         };
         const onBlur = () => {
-            _setTouched(name, true as any);
+            setTouchedRoot(name, true as any);
         };
         return { name, value, onChange, onBlur };
-    }, [absoluteName, _setState, _setTouched, state]);
+    }, [absoluteName, setStateRoot, setTouchedRoot, state]);
 
     const partitionCapsule: FormCapsule<Sub> = useMemo(() => ({
-        _state: state,
-        _setState: setState,
         _name: absoluteName,
+        _state: state,
         _touched: touched,
-        _setTouched: setTouched
-    }), [state, setState, absoluteName, touched, setTouched]);
+        setStateRoot,
+        setTouchedRoot
+    }), [absoluteName, state, touched, setStateRoot, setTouchedRoot]);
 
     return useMemo(() => ({
         touched,

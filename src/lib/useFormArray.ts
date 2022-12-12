@@ -1,17 +1,19 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Nested } from './object-state/types/Nested';
 import { FormCapsule } from './types/useFormTypes';
 import flood from './private/util/flood';
+import concatName from './private/util/concatName';
 
 export default function useFormArray<Base extends Record<string, unknown>, Sub extends Extract<Nested<Base>, unknown[]>>(
-    subname: string,
+    relativeName: string,
     formCapsule: FormCapsule<Base>
 ) {
 
-    const {
-        _setState: setState,
-        _setTouched: setTouched
-    } = formCapsule;
+    const { _name: baseName, setStateRoot, setTouchedRoot } = formCapsule;
+
+    const absoluteName = useMemo(() => {
+        return concatName(baseName, relativeName);
+    }, [baseName, relativeName]);
 
     const _push = (arr: any, value: any) => {
         const newArr = [...arr, value];
@@ -29,24 +31,24 @@ export default function useFormArray<Base extends Record<string, unknown>, Sub e
     };
 
     const replace = useCallback((value: Sub) => {
-        setState(subname, value);
-        setTouched(subname, flood(value, false));
-    }, [subname, setState, setTouched]);
+        setStateRoot(absoluteName, value);
+        setTouchedRoot(absoluteName, flood(value, false));
+    }, [absoluteName, setStateRoot, setTouchedRoot]);
 
     const push = useCallback((value: Sub[0]) => {
-        setState(subname, (oldArr: any) => _push(oldArr, value));
-        setTouched(subname, (oldArr: any) => _push(oldArr, flood(value, false)));
-    }, [subname, setState, setTouched]);
+        setStateRoot(absoluteName, (oldArr: any) => _push(oldArr, value));
+        setTouchedRoot(absoluteName, (oldArr: any) => _push(oldArr, flood(value, false)));
+    }, [absoluteName, setStateRoot, setTouchedRoot]);
 
     const remove = useCallback((idx: number) => {
-        setState(subname, (oldArr: any) => _remove(oldArr, idx));
-        setTouched(subname, (oldArr: any) => _remove(oldArr, idx));
-    }, [subname, setState, setTouched]);
+        setStateRoot(absoluteName, (oldArr: any) => _remove(oldArr, idx));
+        setTouchedRoot(absoluteName, (oldArr: any) => _remove(oldArr, idx));
+    }, [absoluteName, setStateRoot, setTouchedRoot]);
 
     const insert = useCallback((idx: number, value: Sub[0]) => {
-        setState(subname, (oldArr: any) => _insert(oldArr, idx, value));
-        setTouched(subname, (oldArr: any) => _insert(oldArr, idx, flood(value, false)));
-    }, [subname, setState, setTouched]);
+        setStateRoot(absoluteName, (oldArr: any) => _insert(oldArr, idx, value));
+        setTouchedRoot(absoluteName, (oldArr: any) => _insert(oldArr, idx, flood(value, false)));
+    }, [absoluteName, setStateRoot, setTouchedRoot]);
 
     return { replace, push, remove, insert };
 }

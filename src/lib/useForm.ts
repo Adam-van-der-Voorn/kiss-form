@@ -3,7 +3,6 @@ import { FormErrors, FormCapsule, Submit, Register } from './types/useFormTypes'
 import useNestedState from './object-state/useNestedState';
 import flood from './private/util/flood';
 import { Flooded } from './types/Flooded';
-import { Nested } from './object-state/types/Nested';
 import objIsEmpty from './private/util/objIsEmpty';
 import getNestedValue from './object-state/util/getNestedValue';
 
@@ -45,13 +44,12 @@ export default function useForm<FormInput extends Record<string, any>>(initialDa
     };
 
     const formCapsule: FormCapsule<FormInput> = useMemo(() => ({
+        _name: '',
         _touched: touched as Flooded<FormInput, boolean>,
-        _setTouched: setTouched as (name: string, val: SetStateAction<Flooded<Nested<FormInput>, boolean>>) => void,
         _state: state,
-        _setState: setState,
-        _register: register,
-        _name: ''
-    }), [state, setState, register, touched, setTouched]);
+        setTouchedRoot: setTouched as (name: string, val: SetStateAction<Flooded<any, boolean>>) => void,
+        setStateRoot: setState,
+    }), [state, setState, touched, setTouched]);
 
     return { touched, error, state, setState, register, handleSubmit, formCapsule };
 }
