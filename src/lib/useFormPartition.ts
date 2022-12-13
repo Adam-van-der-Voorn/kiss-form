@@ -9,9 +9,12 @@ export default function useFormPartition<Base extends Record<string, unknown>, S
     const {
         _name: baseName,
         _state,
+        _error,
         _touched,
         setStateRoot,
+        setErrorRoot,
         setTouchedRoot,
+        validateRef,
     } = formCapsule;
 
     const absoluteName = useMemo(() => {
@@ -20,6 +23,7 @@ export default function useFormPartition<Base extends Record<string, unknown>, S
 
     const touched = getNestedValue(_touched, relativeName) as Flooded<Sub, boolean>;
     const state = getNestedValue(_state, relativeName) as Sub;
+    const error = getNestedValue(_error, relativeName) as Flooded<Sub, string>;
 
     const setState = useCallback((subname: string, val: SetStateAction<Nested<Sub>>) => {
         const name = concatName(absoluteName, subname);
@@ -34,24 +38,28 @@ export default function useFormPartition<Base extends Record<string, unknown>, S
         };
         const onBlur = () => {
             setTouchedRoot(name, true as any);
+            validateRef.current(name);
         };
         return { name, value, onChange, onBlur };
-    }, [absoluteName, setStateRoot, setTouchedRoot, state]);
+    }, [absoluteName, setStateRoot, setTouchedRoot, state, validateRef]);
 
     const partitionCapsule: FormCapsule<Sub> = useMemo(() => ({
         _name: absoluteName,
         _state: state,
+        _error: error,
         _touched: touched,
+        validateRef,
         setStateRoot,
+        setErrorRoot,
         setTouchedRoot
-    }), [absoluteName, state, touched, setStateRoot, setTouchedRoot]);
+    }), [absoluteName, state, error, touched, validateRef, setStateRoot, setErrorRoot, setTouchedRoot]);
 
     return useMemo(() => ({
         touched,
-        /* error???,*/
+        error,
         state, 
         setState,
         register: registerPartition,
         partitionCapsule
-    }), [partitionCapsule, registerPartition, setState, state, touched]);
+    }), [error, partitionCapsule, registerPartition, setState, state, touched]);
 }

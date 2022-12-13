@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import trimObject from '../../lib/private/util/trimObject';
-import { Flooded } from '../../lib/types/Flooded';
 import useForm from '../../lib/useForm';
 import useFormPartition from '../../lib/useFormPartition';
 import Emails from './Emails';
 import Favourites from './Favourites';
 import useRenderCounter from '../util/useRenderCounter';
 import useNameForPlaceholder from '../util/useNameForPlaceholder';
+import validation from './validation';
 
 const defaultInitialData = {
     name: '',
@@ -40,15 +40,6 @@ function Form1({initialData}: Props) {
     const onSubmit = (data: FormInput) => {
         console.log('submit!', data);
         setSubmittedData(trimObject(data));
-    };
-
-    const validation = (data: FormInput) => {
-        console.log('validating...');
-        const errors: Partial<Flooded<FormInput, string>> = {};
-        if (data.name == '') {
-            errors.name = 'name is required';
-        }
-        return errors;
     };
 
     useNameForPlaceholder();

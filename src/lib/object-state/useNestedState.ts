@@ -17,7 +17,7 @@ export default function useNestedState<T>(initialState: T | (() => T)): [T, (key
                 : prevFullState as Nested<T>; // T and Nested<T> dont union well...
 
             if (prevState === undefined) {
-                console.assert(`useNestedState: attempted to set state but key '${key}' does not exist`);
+                console.assert(`Attempted to set state but key '${key}' does not exist in ${prevFullState}`);
                 return prevFullState;
             }
 

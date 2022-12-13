@@ -9,7 +9,7 @@ export default function useFormArray<Base extends Record<string, unknown>, Sub e
     formCapsule: FormCapsule<Base>
 ) {
 
-    const { _name: baseName, setStateRoot, setTouchedRoot } = formCapsule;
+    const { _name: baseName, setStateRoot, setTouchedRoot, setErrorRoot } = formCapsule;
 
     const absoluteName = useMemo(() => {
         return concatName(baseName, relativeName);
@@ -32,23 +32,27 @@ export default function useFormArray<Base extends Record<string, unknown>, Sub e
 
     const replace = useCallback((value: Sub) => {
         setStateRoot(absoluteName, value);
+        setErrorRoot(absoluteName, flood(value, ''));
         setTouchedRoot(absoluteName, flood(value, false));
-    }, [absoluteName, setStateRoot, setTouchedRoot]);
+    }, [absoluteName, setErrorRoot, setStateRoot, setTouchedRoot]);
 
     const push = useCallback((value: Sub[0]) => {
         setStateRoot(absoluteName, (oldArr: any) => _push(oldArr, value));
+        setErrorRoot(absoluteName, (oldArr: any) => _push(oldArr, flood(value, '')));
         setTouchedRoot(absoluteName, (oldArr: any) => _push(oldArr, flood(value, false)));
-    }, [absoluteName, setStateRoot, setTouchedRoot]);
+    }, [absoluteName, setErrorRoot, setStateRoot, setTouchedRoot]);
 
     const remove = useCallback((idx: number) => {
         setStateRoot(absoluteName, (oldArr: any) => _remove(oldArr, idx));
+        setErrorRoot(absoluteName, (oldArr: any) => _remove(oldArr, idx));
         setTouchedRoot(absoluteName, (oldArr: any) => _remove(oldArr, idx));
-    }, [absoluteName, setStateRoot, setTouchedRoot]);
+    }, [absoluteName, setErrorRoot, setStateRoot, setTouchedRoot]);
 
     const insert = useCallback((idx: number, value: Sub[0]) => {
         setStateRoot(absoluteName, (oldArr: any) => _insert(oldArr, idx, value));
+        setErrorRoot(absoluteName, (oldArr: any) => _insert(oldArr, idx, flood(value, '')));
         setTouchedRoot(absoluteName, (oldArr: any) => _insert(oldArr, idx, flood(value, false)));
-    }, [absoluteName, setStateRoot, setTouchedRoot]);
+    }, [absoluteName, setErrorRoot, setStateRoot, setTouchedRoot]);
 
     return { replace, push, remove, insert };
 }

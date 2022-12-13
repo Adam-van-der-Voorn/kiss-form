@@ -34,4 +34,40 @@ describe('basic', () => {
             .should('not.have.text', '');
  
     });
+    it('validates on input blur, and displays the appropriate error message for a nested input', () => {
+        const expectedErr = 'Card must be a number followed by a suit, e.g K♥ (♦♠♣♥)';
+        const inputKey = 'fav.pokerHands.0.a';
+
+        cy.visit('/');
+
+        cy.get('[data-cy="push-hand"]')
+            .click();
+
+        cy.get('[data-cy=hand-a-err]')
+            .should('have.text', '');
+
+        cy.log('Entering invalid input...');
+        cy.get(`input[name="${inputKey}"]`)
+            .type('not a card');
+        
+        // unfocus input so that validation runs
+        cy.get('body')
+            .click('bottomRight', { force: true });
+
+        cy.get('[data-cy=hand-a-err]')
+            .should('have.text', expectedErr);
+
+        
+        cy.log('Entering valid input...');
+        cy.get(`input[name="${inputKey}"]`)
+            .clear()
+            .type('K♥');
+
+        // unfocus input so that validation runs
+        cy.get('body')
+            .click('bottomRight', { force: true });
+    
+        cy.get('[data-cy=hand-a-err]')
+            .should('have.text', '');
+    });
 });

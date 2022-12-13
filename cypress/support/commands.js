@@ -40,12 +40,19 @@ import getNestedValue from '../../src/lib/object-state/util/getNestedValue';
 // }
 
 Cypress.Commands.add('innerHTMLEqualsObj', { prevSubject: true }, (subject, obj, key) => {
+    const innerHTML = subject.text();
+
     console.log('innerHTMLEqualsObj:');
-    let innerObj = JSON.parse(subject.text());
-    if (key) {
-        innerObj = getNestedValue(innerObj, key);
+    try {
+        let innerObj = JSON.parse(innerHTML);
+        if (key) {
+            innerObj = getNestedValue(innerObj, key);
+        }
+        console.log({ innerHTML, innerObj, inputObj: obj, key });
+        expect(innerObj).to.deep.equal(obj);
+        return subject;
     }
-    console.log({ innerHTML: subject.text(), innerObj, inputObj: obj, key });
-    expect(innerObj).to.deep.equal(obj);
-    return subject;
+    catch (e) {
+        throw Error('innerHTMLEqualsObj: innerHTML cannot be parsed.');
+    }
 });

@@ -23,7 +23,7 @@ function Favourites({ partition }: Props) {
             </div>
             {favourites.pokerHands.map((hand, idx) => {
                 return <PokerHand key={idx}
-                    register={register}
+                    partition={partition}
                     {...{ hand, idx, remove, insert }}
                 />;
             })}
