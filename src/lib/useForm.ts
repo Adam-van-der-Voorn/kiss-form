@@ -1,4 +1,4 @@
-import { FormEvent, SetStateAction, useCallback, useEffect, useMemo, useRef } from 'react';
+import { FormEvent, SetStateAction, useCallback, useMemo, useRef } from 'react';
 import { FormCapsule, Submit, Register } from './types/useFormTypes';
 import useNestedState from './object-state/useNestedState';
 import flood from './private/util/flood';
@@ -18,19 +18,21 @@ export default function useForm<FormInput extends Record<string, any>>(initialDa
     const [touched, setTouched] = useNestedState<any>(flood(initialData, false));
     const [error, setError] = useNestedState<any>(flood(initialData, ''));
 
+    const _register = useCallback((name: string, value: any) => {
+        const onChange = (ev: FormEvent<HTMLInputElement>) => {
+            setState(name, ev.currentTarget.value as any);
+        };
+        const onBlur = () => {
+            setTouched(name, true as any);
+            validateRef.current(name);
+        };
+        return { name, value, onChange, onBlur };
+    }, [setState, setTouched]);
+    
     const register: Register = useCallback((name: string) => {
         const value = getNestedValue(state, name);
-        return {
-            name,
-            value,
-            onChange: (ev: FormEvent<HTMLInputElement>) => {
-                setState(name, ev.currentTarget.value as any);
-            },
-            onBlur: () => {
-                setTouched(name, true as any);
-            }
-        };
-    }, [setState, setTouched, state]);
+        return _register(name, value);
+    }, [_register, state]);
 
     const validate: (name: string) => boolean = name => {
         if (!validation) {
@@ -57,11 +59,12 @@ export default function useForm<FormInput extends Record<string, any>>(initialDa
         _state: state,
         _error: error,
         _touched: touched as Flooded<FormInput, boolean>,
+        _register,
         validateRef,
         setStateRoot: setState,
         setErrorRoot: setError,
         setTouchedRoot: setTouched as (name: string, val: SetStateAction<Flooded<any, boolean>>) => void,
-    }), [state, error, touched, setState, setError, setTouched]);
+    }), [state, error, touched, _register, setState, setError, setTouched]);
 
     return { touched, error, state, setState, register, handleSubmit, formCapsule };
 }

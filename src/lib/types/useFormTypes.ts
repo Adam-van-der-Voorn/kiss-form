@@ -8,6 +8,7 @@ export type FormCapsule<T> = {
     _state: T,
     _error: Flooded<T, string>,
     _touched: Flooded<T, boolean>,
+    _register: any,
     validateRef: React.MutableRefObject<(name: string) => boolean>
     setStateRoot: (name: string, val: SetStateAction<any>) => void,
     setErrorRoot: (key: string, val: SetStateAction<Flooded<any, string>>) => void,

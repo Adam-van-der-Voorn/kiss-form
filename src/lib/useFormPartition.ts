@@ -11,6 +11,7 @@ export default function useFormPartition<Base extends Record<string, unknown>, S
         _state,
         _error,
         _touched,
+        _register,
         setStateRoot,
         setErrorRoot,
         setTouchedRoot,
@@ -33,26 +34,20 @@ export default function useFormPartition<Base extends Record<string, unknown>, S
     const registerPartition: Register = useCallback((subname: string) => {
         const name = concatName(absoluteName, subname);
         const value = getNestedValue(state, subname);
-        const onChange = (ev: FormEvent<HTMLInputElement>) => {
-            setStateRoot(name, ev.currentTarget.value as any);
-        };
-        const onBlur = () => {
-            setTouchedRoot(name, true as any);
-            validateRef.current(name);
-        };
-        return { name, value, onChange, onBlur };
-    }, [absoluteName, setStateRoot, setTouchedRoot, state, validateRef]);
+        return _register(name, value);
+    }, [_register, absoluteName, state]);
 
     const partitionCapsule: FormCapsule<Sub> = useMemo(() => ({
         _name: absoluteName,
         _state: state,
         _error: error,
         _touched: touched,
+        _register,
         validateRef,
         setStateRoot,
         setErrorRoot,
         setTouchedRoot
-    }), [absoluteName, state, error, touched, validateRef, setStateRoot, setErrorRoot, setTouchedRoot]);
+    }), [absoluteName, state, error, touched, _register, validateRef, setStateRoot, setErrorRoot, setTouchedRoot]);
 
     return useMemo(() => ({
         touched,
