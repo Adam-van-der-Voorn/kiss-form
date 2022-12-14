@@ -94,8 +94,7 @@ describe('only render memoised component when needed', () => {
         });
     });
 
-    // scope has been dropped for partitoning array objects. New test will be devised
-    it.skip('edit array field', () => {
+    it('edit array field', () => {
         let renderCounts = {};
         cy.visit('/');
         cy.get('[data-cy=push-hand]')
