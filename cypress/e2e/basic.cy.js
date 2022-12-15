@@ -150,7 +150,7 @@ describe('initial state', () => {
     });
 });
 
-describe('touched and dirty', () => {
+describe('touched', () => {
     it('can register a field being touched', () => {
         cy.visit('/');
 
@@ -163,11 +163,93 @@ describe('touched and dirty', () => {
         cy.get('[name="name"]')
             .click();
         cy.get('body')
-            .click(3, 3);
+            .click(3, 3, { force: true });
 
         cy.get('#form-touched')
             .innerHTMLEqualsObj(true, 'name')
             .innerHTMLEqualsObj(false, 'age');
+    });
+    it('can register a nested field being touched', () => {
+        cy.visit('/');
 
+        cy.get('#form-touched')
+            .innerHTMLEqualsObj(false, 'email.work');
+
+        cy.log('clicking in and out of work email field');
+        cy.get('[name="email.work"]')
+            .click();
+
+        cy.get('body')
+            .click(3, 3, { force: true });
+
+        cy.get('#form-touched')
+            .innerHTMLEqualsObj(true, 'email.work');
+    });
+    it('can register an array field being touched', () => {
+        cy.visit('/');
+
+        cy.get('[data-cy=push-hand]')
+            .click();
+
+        cy.get('#form-touched')
+            .innerHTMLEqualsObj(false, 'fav.pokerHands.0.a');
+
+        cy.log('clicking in and out of poker hand field');
+        cy.get('[name="fav.pokerHands.0.a"]')
+            .click();
+
+        cy.get('body')
+            .click(3, 3, { force: true });
+
+        cy.get('#form-touched')
+            .innerHTMLEqualsObj(true, 'fav.pokerHands.0.a');
+    });
+});
+
+describe('dirty', () => {
+    it('can register a field being used', () => {
+        cy.visit('/');
+
+        cy.get('#form-dirty')
+            .innerHTMLEqualsObj(false, 'name')
+            .innerHTMLEqualsObj(false, 'age');
+
+
+        cy.log('editing name field');
+        cy.get('[name="name"]')
+            .type('someone');
+
+        cy.get('#form-dirty')
+            .innerHTMLEqualsObj(true, 'name')
+            .innerHTMLEqualsObj(false, 'age');
+    });
+    it('can register a nested field being dirty', () => {
+        cy.visit('/');
+
+        cy.get('#form-dirty')
+            .innerHTMLEqualsObj(false, 'email.work');
+
+        cy.log('editing work email field');
+        cy.get('[name="email.work"]')
+            .type('asdnsald@tempmail.com');
+
+        cy.get('#form-dirty')
+            .innerHTMLEqualsObj(true, 'email.work');
+    });
+    it('can register an array field being dirty', () => {
+        cy.visit('/');
+
+        cy.get('[data-cy=push-hand]')
+            .click();
+
+        cy.get('#form-dirty')
+            .innerHTMLEqualsObj(false, 'fav.pokerHands.0.a');
+
+        cy.log('editing poker hand field');
+        cy.get('[name="fav.pokerHands.0.a"]')
+            .type('K♥');
+
+        cy.get('#form-dirty')
+            .innerHTMLEqualsObj(true, 'fav.pokerHands.0.a');
     });
 });

@@ -15,19 +15,21 @@ export default function useForm<FormInput extends Record<string, any>>(initialDa
     const validateRef = useRef<any>(null);
     const [state, setState] = useNestedState(initialData);
     // has to be any internally to avoid 'type instantiation is excessively deep and possibly infinite'
-    const [touched, setTouched] = useNestedState<any>(flood(initialData, false));
     const [error, setError] = useNestedState<any>(flood(initialData, ''));
+    const [touched, setTouched] = useNestedState<any>(flood(initialData, false));
+    const [dirty, setDirty] = useNestedState<any>(flood(initialData, false));
 
     const _register = useCallback((name: string, value: any) => {
         const onChange = (ev: FormEvent<HTMLInputElement>) => {
             setState(name, ev.currentTarget.value as any);
+            setDirty(name, true);
         };
         const onBlur = () => {
-            setTouched(name, true as any);
+            setTouched(name, true);
             validateRef.current(name);
         };
         return { name, value, onChange, onBlur };
-    }, [setState, setTouched]);
+    }, [setDirty, setState, setTouched]);
     
     const register: Register = useCallback((name: string) => {
         const value = getNestedValue(state, name);
@@ -58,13 +60,15 @@ export default function useForm<FormInput extends Record<string, any>>(initialDa
         _name: '',
         _state: state,
         _error: error,
-        _touched: touched as Flooded<FormInput, boolean>,
+        _touched: touched,
+        _dirty: dirty,
         _register,
         validateRef,
         setStateRoot: setState,
         setErrorRoot: setError,
         setTouchedRoot: setTouched as (name: string, val: SetStateAction<Flooded<any, boolean>>) => void,
-    }), [state, error, touched, _register, setState, setError, setTouched]);
+        setDirtyRoot: setDirty,
+    }), [state, error, touched, dirty, _register, setState, setError, setTouched, setDirty]);
 
-    return { touched, error, state, setState, register, handleSubmit, formCapsule };
+    return { state, error, touched, dirty, setState, register, handleSubmit, formCapsule };
 }

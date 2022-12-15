@@ -9,7 +9,7 @@ export default function useFormArray<Base extends Record<string, unknown>, Sub e
     formCapsule: FormCapsule<Base>
 ) {
 
-    const { _name: baseName, setStateRoot, setTouchedRoot, setErrorRoot } = formCapsule;
+    const { _name: baseName, setStateRoot, setErrorRoot, setTouchedRoot, setDirtyRoot } = formCapsule;
 
     const absoluteName = useMemo(() => {
         return concatName(baseName, relativeName);
@@ -34,25 +34,29 @@ export default function useFormArray<Base extends Record<string, unknown>, Sub e
         setStateRoot(absoluteName, value);
         setErrorRoot(absoluteName, flood(value, ''));
         setTouchedRoot(absoluteName, flood(value, false));
-    }, [absoluteName, setErrorRoot, setStateRoot, setTouchedRoot]);
+        setDirtyRoot(absoluteName, flood(value, false));
+    }, [absoluteName, setDirtyRoot, setErrorRoot, setStateRoot, setTouchedRoot]);
 
     const push = useCallback((value: Sub[0]) => {
         setStateRoot(absoluteName, (oldArr: any) => _push(oldArr, value));
         setErrorRoot(absoluteName, (oldArr: any) => _push(oldArr, flood(value, '')));
         setTouchedRoot(absoluteName, (oldArr: any) => _push(oldArr, flood(value, false)));
-    }, [absoluteName, setErrorRoot, setStateRoot, setTouchedRoot]);
+        setDirtyRoot(absoluteName, (oldArr: any) => _push(oldArr, flood(value, false)));
+    }, [absoluteName, setDirtyRoot, setErrorRoot, setStateRoot, setTouchedRoot]);
 
     const remove = useCallback((idx: number) => {
         setStateRoot(absoluteName, (oldArr: any) => _remove(oldArr, idx));
         setErrorRoot(absoluteName, (oldArr: any) => _remove(oldArr, idx));
         setTouchedRoot(absoluteName, (oldArr: any) => _remove(oldArr, idx));
-    }, [absoluteName, setErrorRoot, setStateRoot, setTouchedRoot]);
+        setDirtyRoot(absoluteName, (oldArr: any) => _remove(oldArr, idx));
+    }, [absoluteName, setDirtyRoot, setErrorRoot, setStateRoot, setTouchedRoot]);
 
     const insert = useCallback((idx: number, value: Sub[0]) => {
         setStateRoot(absoluteName, (oldArr: any) => _insert(oldArr, idx, value));
         setErrorRoot(absoluteName, (oldArr: any) => _insert(oldArr, idx, flood(value, '')));
         setTouchedRoot(absoluteName, (oldArr: any) => _insert(oldArr, idx, flood(value, false)));
-    }, [absoluteName, setErrorRoot, setStateRoot, setTouchedRoot]);
+        setDirtyRoot(absoluteName, (oldArr: any) => _insert(oldArr, idx, flood(value, false)));
+    }, [absoluteName, setDirtyRoot, setErrorRoot, setStateRoot, setTouchedRoot]);
 
     return { replace, push, remove, insert };
 }

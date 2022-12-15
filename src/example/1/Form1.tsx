@@ -7,6 +7,7 @@ import Favourites from './Favourites';
 import useRenderCounter from '../util/useRenderCounter';
 import useNameForPlaceholder from '../util/useNameForPlaceholder';
 import validation from './validation';
+import Toggle from '../Toggle';
 
 const defaultInitialData = {
     name: '',
@@ -44,7 +45,7 @@ function Form1({initialData}: Props) {
 
     useNameForPlaceholder();
 
-    const { state, touched, error, register, handleSubmit, formCapsule } = useForm(initialData, onSubmit, { validation });
+    const { state, error, touched, dirty, register, handleSubmit, formCapsule } = useForm(initialData, onSubmit, { validation });
     const emailsPartition = useFormPartition<FormInput, FormInput['email']>('email', formCapsule);
     const favouritesPartition = useFormPartition<FormInput, FormInput['fav']>('fav', formCapsule);
 
@@ -58,13 +59,22 @@ function Form1({initialData}: Props) {
             </div>
             <Emails partition={emailsPartition} />
             <Favourites partition={favouritesPartition} />
-            <pre id="form-state">
-                {JSON.stringify(trimObject(state), null, 2)}
-            </pre>
             <input type="submit" />
-            <pre id="form-touched">
-                {JSON.stringify(touched, null, 2)}
-            </pre>
+            <Toggle name="form state">
+                <pre id="form-state">
+                    {JSON.stringify(trimObject(state), null, 2)}
+                </pre>
+            </Toggle>
+            <Toggle name="form touched">
+                <pre id="form-touched">
+                    {JSON.stringify(touched, null, 2)}
+                </pre>
+            </Toggle>
+            <Toggle name="form dirty">
+                <pre id="form-dirty">
+                    {JSON.stringify(dirty, null, 2)}
+                </pre>
+            </Toggle>
             <pre id="submitted-data">
                 {JSON.stringify(submittedData, null, 2)}
             </pre>

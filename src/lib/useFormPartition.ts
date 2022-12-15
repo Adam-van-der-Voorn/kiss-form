@@ -11,10 +11,12 @@ export default function useFormPartition<Base extends Record<string, unknown>, S
         _state,
         _error,
         _touched,
+        _dirty,
         _register,
         setStateRoot,
         setErrorRoot,
         setTouchedRoot,
+        setDirtyRoot,
         validateRef,
     } = formCapsule;
 
@@ -22,9 +24,10 @@ export default function useFormPartition<Base extends Record<string, unknown>, S
         return concatName(baseName, relativeName);
     }, [baseName, relativeName]);
 
-    const touched = getNestedValue(_touched, relativeName) as Flooded<Sub, boolean>;
     const state = getNestedValue(_state, relativeName) as Sub;
     const error = getNestedValue(_error, relativeName) as Flooded<Sub, string>;
+    const touched = getNestedValue(_touched, relativeName) as Flooded<Sub, boolean>;
+    const dirty = getNestedValue(_dirty, relativeName) as Flooded<Sub, boolean>;
 
     const setState = useCallback((subname: string, val: SetStateAction<Nested<Sub>>) => {
         const name = concatName(absoluteName, subname);
@@ -42,12 +45,14 @@ export default function useFormPartition<Base extends Record<string, unknown>, S
         _state: state,
         _error: error,
         _touched: touched,
+        _dirty: dirty,
         _register,
         validateRef,
         setStateRoot,
         setErrorRoot,
-        setTouchedRoot
-    }), [absoluteName, state, error, touched, _register, validateRef, setStateRoot, setErrorRoot, setTouchedRoot]);
+        setTouchedRoot,
+        setDirtyRoot,
+    }), [absoluteName, state, error, touched, dirty, _register, validateRef, setStateRoot, setErrorRoot, setTouchedRoot, setDirtyRoot]);
 
     return useMemo(() => ({
         touched,
