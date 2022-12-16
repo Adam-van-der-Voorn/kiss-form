@@ -28,7 +28,7 @@ export type FormPartition<T> = {
 
 export type Submit<T> = ((formInput: T) => Promise<void>) | ((formInput: T) => void);
 
-export type Register = (name: string) => {
+export type Register = (name: string, opts?: any) => {
     name: string;
     onChange: (ev: FormEvent<HTMLInputElement>) => void;
     onBlur: (ev: FormEvent<HTMLInputElement>) => void;

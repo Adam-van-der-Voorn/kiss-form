@@ -8,6 +8,7 @@ import useRenderCounter from '../util/useRenderCounter';
 import useNameForPlaceholder from '../util/useNameForPlaceholder';
 import validation from './validation';
 import Toggle from '../Toggle';
+import BankDetails from './BankDetails';
 
 const defaultInitialData = {
     name: '',
@@ -19,6 +20,9 @@ const defaultInitialData = {
     fav: {
         fruit: '',
         pokerHands: [] as { a: string, b: string }[]
+    },
+    bank: {
+        number: ''
     }
 };
 
@@ -45,7 +49,7 @@ function Form1({initialData}: Props) {
 
     useNameForPlaceholder();
 
-    const { state, error, touched, dirty, register, handleSubmit, formCapsule } = useForm(initialData, onSubmit, { validation });
+    const { state, error, touched, dirty, register, handleSubmit, formCapsule, setState } = useForm(initialData, onSubmit, { validation });
     const emailsPartition = useFormPartition<FormInput, FormInput['email']>('email', formCapsule);
     const favouritesPartition = useFormPartition<FormInput, FormInput['fav']>('fav', formCapsule);
 
@@ -59,6 +63,7 @@ function Form1({initialData}: Props) {
             </div>
             <Emails partition={emailsPartition} />
             <Favourites partition={favouritesPartition} />
+            <BankDetails setState={setState} register={register} />
             <input type="submit" />
             <Toggle name="form state">
                 <pre id="form-state">

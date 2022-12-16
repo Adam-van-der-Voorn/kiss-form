@@ -19,21 +19,27 @@ export default function useForm<FormInput extends Record<string, any>>(initialDa
     const [touched, setTouched] = useNestedState<any>(flood(initialData, false));
     const [dirty, setDirty] = useNestedState<any>(flood(initialData, false));
 
-    const _register = useCallback((name: string, value: any) => {
+    const _register = useCallback((name: string, value: any, altCallbacks?: any) => {
         const onChange = (ev: FormEvent<HTMLInputElement>) => {
             setState(name, ev.currentTarget.value as any);
             setDirty(name, true);
+            if (altCallbacks?.onChange) {
+                altCallbacks.onChange(ev);
+            }
         };
-        const onBlur = () => {
+        const onBlur = (ev: FormEvent<HTMLInputElement>) => {
             setTouched(name, true);
             validateRef.current(name);
+            if (altCallbacks?.onBlur) {
+                altCallbacks.onBlur(ev);
+            }
         };
         return { name, value, onChange, onBlur };
     }, [setDirty, setState, setTouched]);
     
-    const register: Register = useCallback((name: string) => {
+    const register: Register = useCallback((name: string, altCallbacks?: any) => {
         const value = getNestedValue(state, name);
-        return _register(name, value);
+        return _register(name, value, altCallbacks);
     }, [_register, state]);
 
     const validate: (name: string) => boolean = name => {

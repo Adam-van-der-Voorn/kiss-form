@@ -34,10 +34,10 @@ export default function useFormPartition<Base extends Record<string, unknown>, S
         setStateRoot(name, val as any);
     }, [absoluteName, setStateRoot]);
 
-    const registerPartition: Register = useCallback((subname: string) => {
+    const registerPartition: Register = useCallback((subname: string, altCallbacks?: any) => {
         const name = concatName(absoluteName, subname);
         const value = getNestedValue(state, subname);
-        return _register(name, value);
+        return _register(name, value, altCallbacks);
     }, [_register, absoluteName, state]);
 
     const partitionCapsule: FormCapsule<Sub> = useMemo(() => ({

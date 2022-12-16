@@ -11,12 +11,12 @@ function Emails({ partition }: Props) {
     const renderCount = useRenderCounter('email');
     const { setState: setEmail } = partition;
 
-    const clear = useCallback(() => {
+    const clear = () => {
         setEmail('', {
             work: '',
             personal: ''
         });
-    }, [setEmail]);
+    };
 
     return (
         <div className="nested">
