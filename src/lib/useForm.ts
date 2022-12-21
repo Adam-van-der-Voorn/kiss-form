@@ -39,6 +39,10 @@ export default function useForm<FormInput extends Record<string, any>>(initialDa
     
     const register: Register = useCallback((name: string, altCallbacks?: any) => {
         const value = getNestedValue(state, name);
+        if (value === undefined) {
+            console.error(`kiss-form: Attempted to register '${name}, but an entry for '${name}' could not be found in`, state);
+            return { name };
+        }
         return _register(name, value, altCallbacks);
     }, [_register, state]);
 

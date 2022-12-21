@@ -37,6 +37,10 @@ export default function useFormPartition<Base extends Record<string, unknown>, S
     const registerPartition: Register = useCallback((subname: string, altCallbacks?: any) => {
         const name = concatName(absoluteName, subname);
         const value = getNestedValue(state, subname);
+        if (value === undefined) {
+            console.error(`kiss-form: Attempted to register '${name}, but an entry for '${subname}' could not be found in`, state);
+            return { name };
+        }
         return _register(name, value, altCallbacks);
     }, [_register, absoluteName, state]);
 

@@ -30,6 +30,7 @@ export type Submit<T> = ((formInput: T) => Promise<void>) | ((formInput: T) => v
 
 export type Register = (name: string, opts?: any) => {
     name: string;
-    onChange: (ev: FormEvent<HTMLInputElement>) => void;
-    onBlur: (ev: FormEvent<HTMLInputElement>) => void;
+    value?: any;
+    onChange?: (ev: FormEvent<HTMLInputElement>) => void;
+    onBlur?: (ev: FormEvent<HTMLInputElement>) => void;
 };

@@ -15,21 +15,6 @@ export default function useFormArray<Base extends Record<string, unknown>, Sub e
         return concatName(baseName, relativeName);
     }, [baseName, relativeName]);
 
-    const _push = (arr: any, value: any) => {
-        const newArr = [...arr, value];
-        return newArr as any;
-    };
-
-    const _remove = (arr: any, idx: number) => {
-        arr.splice(idx, 1);
-        return [...arr] as any;
-    };
-
-    const _insert = (arr: any, idx: number, value: any) => {
-        const newArr = [...arr.slice(0, idx), value, ...arr.slice(idx)];
-        return newArr as any;
-    };
-
     const replace = useCallback((value: Sub) => {
         setStateRoot(absoluteName, value);
         setErrorRoot(absoluteName, flood(value, ''));
@@ -45,18 +30,58 @@ export default function useFormArray<Base extends Record<string, unknown>, Sub e
     }, [absoluteName, setDirtyRoot, setErrorRoot, setStateRoot, setTouchedRoot]);
 
     const remove = useCallback((idx: number) => {
-        setStateRoot(absoluteName, (oldArr: any) => _remove(oldArr, idx));
-        setErrorRoot(absoluteName, (oldArr: any) => _remove(oldArr, idx));
-        setTouchedRoot(absoluteName, (oldArr: any) => _remove(oldArr, idx));
-        setDirtyRoot(absoluteName, (oldArr: any) => _remove(oldArr, idx));
+        try {
+            setStateRoot(absoluteName, (oldArr: any) => _remove(oldArr, idx));
+            setErrorRoot(absoluteName, (oldArr: any) => _remove(oldArr, idx));
+            setTouchedRoot(absoluteName, (oldArr: any) => _remove(oldArr, idx));
+            setDirtyRoot(absoluteName, (oldArr: any) => _remove(oldArr, idx));
+        }
+        catch (e) {
+            if (e instanceof RangeError) {
+                console.error(`while removing an element from ${absoluteName}: ${e.message}.`);
+                return;
+            }
+            throw e;
+        }
     }, [absoluteName, setDirtyRoot, setErrorRoot, setStateRoot, setTouchedRoot]);
 
     const insert = useCallback((idx: number, value: Sub[0]) => {
-        setStateRoot(absoluteName, (oldArr: any) => _insert(oldArr, idx, value));
-        setErrorRoot(absoluteName, (oldArr: any) => _insert(oldArr, idx, flood(value, '')));
-        setTouchedRoot(absoluteName, (oldArr: any) => _insert(oldArr, idx, flood(value, false)));
-        setDirtyRoot(absoluteName, (oldArr: any) => _insert(oldArr, idx, flood(value, false)));
+        try {
+            setStateRoot(absoluteName, (oldArr: any) => _insert(oldArr, idx, value));
+            setErrorRoot(absoluteName, (oldArr: any) => _insert(oldArr, idx, flood(value, '')));
+            setTouchedRoot(absoluteName, (oldArr: any) => _insert(oldArr, idx, flood(value, false)));
+            setDirtyRoot(absoluteName, (oldArr: any) => _insert(oldArr, idx, flood(value, false)));
+        }
+        catch (e) {
+            if (e instanceof RangeError) {
+                console.error(`while inserting an element into ${absoluteName}: ${e.message}.`);
+                return;
+            }
+            throw e;
+        }
     }, [absoluteName, setDirtyRoot, setErrorRoot, setStateRoot, setTouchedRoot]);
 
     return { replace, push, remove, insert };
 }
+
+const _push = (arr: any, value: any) => {
+    const newArr = [...arr, value];
+    return newArr as any;
+};
+
+const _remove = (arr: any, idx: number) => {
+    if (idx >= arr.length || idx < 0) {
+        throw new RangeError(`index ${idx} is out of bounds for length ${arr.length}`);
+    }
+    arr.splice(idx, 1);
+    return [...arr] as any;
+};
+
+const _insert = (arr: any, idx: number, value: any) => {
+    if (idx >= arr.length || idx < 0) {
+        throw new RangeError(`index ${idx} is out of bounds for length ${arr.length}`);
+    }
+    const newArr = [...arr.slice(0, idx), value, ...arr.slice(idx)];
+    return newArr as any;
+};
+
